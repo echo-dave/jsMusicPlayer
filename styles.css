@@ -7,6 +7,11 @@
     padding: .5rem;
     margin: 1rem 0;
 }
+#trackList span {
+    padding: .25em;
+    margin-bottom: .25em;
+    background-color: #d0d0d0;
+}
 #player {
     max-width: 350px;
     border: #000000 solid 1px;
