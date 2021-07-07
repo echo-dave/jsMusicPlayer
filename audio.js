@@ -9,7 +9,7 @@ function buildPlayer () {
     let song = 
     `<figure>
         <figcaption>
-            
+            <span id="songTitle"></span>
         </figcaption>
         <audio controls type="audio/mpeg">Your browser can't play this!</audio>
         <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".75">
@@ -25,7 +25,7 @@ function buildPlayer () {
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
         console.log('clicked');
-        playPause.className == "play" ? startPlay(audio) : stopPlay(audio);  
+        audio.paused ? startPlay(audio) : stopPlay(audio);  
     })
 }
 
@@ -67,7 +67,7 @@ function buildPlayer () {
         setPlayheadMax(audio);
         setDuration(audio);
         volume.addEventListener('input', () => changeVolume(audio));
-        document.querySelector("#player figure figcaption").innerText = title;
+        document.querySelector("#songTitle").innerText = title;
     }
 
     function setPlayheadTime(audio, playhead) {
@@ -77,9 +77,8 @@ function buildPlayer () {
 
     function pauseAudio(audio) {
         console.log('pauseAudio function');
-        let playPause = document.querySelector("#playPause");
-        playPause.className == "play" ? startPlay(audio) : stopPlay(audio);  
-        playPause.className == "" ? stopPlay(audio) : null;
+        stopPlay(audio);  
+       
     }
 
     function startPlay(audio) {
