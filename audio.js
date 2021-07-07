@@ -1,8 +1,6 @@
 let player = document.getElementById('player');
 let audio; 
 
-let songName;
-let songURL;
 
 buildPlayer();
 
@@ -11,25 +9,32 @@ function buildPlayer () {
     let song = 
     `<figure>
         <figcaption>
-            ${typeof songName !== "undefined" ? songName : "" }
+            
         </figcaption>
-        <audio controls src="${songURL ? songURL : "" }" type="audio/mpeg">Your browser can't play this!</audio>
-        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1">
+        <audio controls type="audio/mpeg">Your browser can't play this!</audio>
+        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".75">
         <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
+        <div id="playPause"></div>
         <span id="currentTime">0:00</span>
         <span id="duration">0:00</span>
         
     </figure>`
 
     player.innerHTML = song;
-    }
+    
+    let playPause = document.querySelector("#playPause");
+    playPause.addEventListener("click", () => {
+        console.log('clicked');
+        playPause.className == "play" ? startPlay(audio) : stopPlay(audio);  
+    })
+}
 
     let loadAudio =  (url, title) => {
         console.log(url);
         audio = document.querySelector("audio");
+        pauseAudio(audio);
         audio.src = url;
         console.log(`this ${this}, title ${title}`);
-
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio)
         } else {
@@ -69,3 +74,26 @@ function buildPlayer () {
         audio.currentTime = playhead.value;
         console.log(`audio duration: ${audio.duration} max scrubber: ${playhead.max}`);
     }
+
+    function pauseAudio(audio) {
+        console.log('pauseAudio function');
+        let playPause = document.querySelector("#playPause");
+        playPause.className == "play" ? startPlay(audio) : stopPlay(audio);  
+        playPause.className == "" ? stopPlay(audio) : null;
+    }
+
+    function startPlay(audio) {
+        audio.play();
+        playPause.className = "pause";
+        playPause.style.display = "block";
+        console.log('now playing');
+    }
+
+    function stopPlay(audio) {
+        audio.pause();
+        playPause.className="play";
+        playPause.style.display = "block";
+        console.log('now paused');
+    }
+
+    

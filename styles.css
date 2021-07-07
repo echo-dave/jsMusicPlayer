@@ -1,3 +1,25 @@
+.play {
+    width:0;
+    height:0;
+    box-sizing: border-box;
+    margin: .5rem .5rem .5rem 0;
+    /* background-color: green; */
+    border-left: calc((1rem + 1rem) * .866) solid green;
+    border-top: 1rem  solid transparent;
+    border-bottom: 1rem solid transparent;
+    display:none;
+}
+.pause {
+    display:none;
+    height:1rem;
+    width: 1rem;
+    border-left:  .4rem solid rgb(255, 200, 0);
+    border-right: .4rem solid rgb(255, 200, 0);
+    border-top: 0 none;
+    border-bottom: 0 none;
+    box-sizing: border-box;
+    margin: .5rem .5rem .5rem 0;
+}
 #trackList {
     border: 1px; 
     border-radius: .25rem; 
