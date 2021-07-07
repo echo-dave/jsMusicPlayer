@@ -12,7 +12,7 @@ function buildPlayer () {
             <span id="songTitle"></span>
         </figcaption>
         <audio controls type="audio/mpeg">Your browser can't play this!</audio>
-        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".75">
+        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5">
         <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
         <div id="playPause"></div>
         <span id="currentTime">0:00</span>
@@ -25,8 +25,9 @@ function buildPlayer () {
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
         console.log('clicked');
-        audio.paused ? startPlay(audio) : stopPlay(audio);  
+        audio.paused ? startPlay(audio) : stopPlay(audio);   
     })
+
 }
 
     let loadAudio =  (url, title) => {
@@ -35,6 +36,14 @@ function buildPlayer () {
         pauseAudio(audio);
         audio.src = url;
         console.log(`this ${this}, title ${title}`);
+        
+        if (!audio["data-time"]) {
+            audio.addEventListener("timeupdate", () => {
+            audio["data-time"] = true;
+            document.querySelector("#playhead").value = audio.currentTime;
+        }) 
+        }
+        document.querySelector("#playhead").value = 0;
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio)
         } else {
