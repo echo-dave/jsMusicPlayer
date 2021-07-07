@@ -20,18 +20,41 @@ function buildPlayer () {
     </figure>`
 
     player.innerHTML = song;
+    volume = document.getElementById('volume');
+    volume.addEventListener('input', () => changeVolume(audio));
+    console.log("volume element " + volume.value);
+    console.log(`audio element volume ${audio}`);
     }
 
     function loadAudio (url, audio) {
-        audio = document.querySelector("audio");
         console.log(url);
+        audio = document.querySelector("audio");
         audio.src = url;
         if (audio.readyState > 0 ) {
             setPlayheadMax(audio);
+            setDuration(audio);
+
         } else {
             audio.addEventListener('loadedmetadata', () => {
                 setPlayheadMax(audio);
                 setDuration(audio);
             });
         }
+    }
+
+    function setPlayheadMax(audio) {
+        let playheadMax = document.querySelector("#playhead").max;
+        playheadMax =  Math.floor(audio.duration); 
+     }
+     
+     function setDuration(audio) {
+         let minutes = Math.floor(audio.duration / 60);
+         let secs = Math.floor(audio.duration) % 60;
+         secs = secs.toString().padStart(2,'0');
+         document.querySelector("#duration").innerText = `${minutes} : ${secs}`;
+     }
+
+     function changeVolume(audio) {
+         console.log(`changeVolume audio element ${audio}`);
+        //audio.volume = volume.value;
     }
