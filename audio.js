@@ -11,37 +11,40 @@ function buildPlayer () {
     let song = 
     `<figure>
         <figcaption>
-            ${typeof songName !== "undefined" ? songName : "no song" }
+            ${typeof songName !== "undefined" ? songName : "" }
         </figcaption>
         <audio controls src="${songURL ? songURL : "" }" type="audio/mpeg">Your browser can't play this!</audio>
         <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1">
         <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
+        <span id="currentTime">0:00</span>
         <span id="duration">0:00</span>
         
     </figure>`
 
     player.innerHTML = song;
-    volume = document.getElementById('volume');
-    console.log("volume element " + volume.value);
-    console.log(`audio element volume ${audio}`);
     }
 
-    function loadAudio (url, audio) {
+    let loadAudio =  (url, title) => {
         console.log(url);
         audio = document.querySelector("audio");
         audio.src = url;
+        console.log(`this ${this}, title ${title}`);
+
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio)
         } else {
             audio.addEventListener('loadedmetadata', () => {
-                applyAudioMetadata(audio)
+                applyAudioMetadata(audio, title)
             });
         }
     }
 
     function setPlayheadMax(audio) {
-        let playheadMax = document.querySelector("#playhead").max;
-        playheadMax =  Math.floor(audio.duration); 
+        let playhead = document.querySelector("#playhead");
+        playhead.max =  Math.floor(audio.duration);
+        playhead.addEventListener("input", () => {
+        setPlayheadTime(audio, playhead);
+        })
      }
      
      function setDuration(audio) {
@@ -55,8 +58,14 @@ function buildPlayer () {
         document.querySelector("audio").volume = volume.value;
     }
 
-    function applyAudioMetadata (audio) {
+    function applyAudioMetadata (audio, title) {
         setPlayheadMax(audio);
         setDuration(audio);
         volume.addEventListener('input', () => changeVolume(audio));
+        document.querySelector("#player figure figcaption").innerText = title;
+    }
+
+    function setPlayheadTime(audio, playhead) {
+        audio.currentTime = playhead.value;
+        console.log(`audio duration: ${audio.duration} max scrubber: ${playhead.max}`);
     }
