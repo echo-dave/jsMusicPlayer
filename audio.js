@@ -6,6 +6,7 @@ let songURL;
 
 buildPlayer();
 
+
 function buildPlayer () {
     let song = 
     `<figure>
@@ -13,7 +14,7 @@ function buildPlayer () {
             ${typeof songName !== "undefined" ? songName : "no song" }
         </figcaption>
         <audio controls src="${songURL ? songURL : "" }" type="audio/mpeg">Your browser can't play this!</audio>
-        <input type="range" name="volume" id="volume" min="0" max="100" step="1" value="100">
+        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1">
         <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
         <span id="duration">0:00</span>
         
@@ -21,7 +22,6 @@ function buildPlayer () {
 
     player.innerHTML = song;
     volume = document.getElementById('volume');
-    volume.addEventListener('input', () => changeVolume(audio));
     console.log("volume element " + volume.value);
     console.log(`audio element volume ${audio}`);
     }
@@ -31,13 +31,10 @@ function buildPlayer () {
         audio = document.querySelector("audio");
         audio.src = url;
         if (audio.readyState > 0 ) {
-            setPlayheadMax(audio);
-            setDuration(audio);
-
+            applyAudioMetadata(audio)
         } else {
             audio.addEventListener('loadedmetadata', () => {
-                setPlayheadMax(audio);
-                setDuration(audio);
+                applyAudioMetadata(audio)
             });
         }
     }
@@ -54,7 +51,12 @@ function buildPlayer () {
          document.querySelector("#duration").innerText = `${minutes} : ${secs}`;
      }
 
-     function changeVolume(audio) {
-         console.log(`changeVolume audio element ${audio}`);
-        //audio.volume = volume.value;
+     function changeVolume() {
+        document.querySelector("audio").volume = volume.value;
+    }
+
+    function applyAudioMetadata (audio) {
+        setPlayheadMax(audio);
+        setDuration(audio);
+        volume.addEventListener('input', () => changeVolume(audio));
     }
