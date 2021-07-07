@@ -6,16 +6,20 @@
     max-width: 350px;
     padding: .5rem;
     margin: 1rem 0;
+    box-sizing: border-box;
 }
 #trackList span {
-    padding: .25em;
-    margin-bottom: .25em;
+    padding: .25rem 0 .25rem .25rem;
+    margin-bottom: .25rem;
     background-color: #d0d0d0;
+    display: block;
+    cursor: pointer;
 }
 #player {
     max-width: 350px;
     border: #000000 solid 1px;
     border-radius: .25rem;
+    box-sizing: border-box;
 }
 
 /* input range styles */
