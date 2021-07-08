@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap');
 :root {
     --light-font: rgb(231, 231, 231);
     --accent-color: rgb(216, 143, 247);
@@ -6,6 +8,8 @@
     /* --slide-handle: rgba(207, 207, 207, 0.894); */
     --slide-handle:var(--accent-color);
     --play-pause:var(--accent-color);
+    --title-font-family: 'IBM Plex Mono', monospace;
+    --title-tracking:.15em;
 }
 
 span, input {
@@ -98,11 +102,13 @@ span, input {
     padding: .5em;
     margin: 1em 0;
     box-sizing: border-box;
+    background: var(--accent-color);
 }
-#trackList span {
-    padding: .25em 0 .25rem .25em;
-    margin-bottom: .25em;
-    background-color: #d0d0d0;
+#trackList h2 {
+    /* padding: .25em 0 .25rem .25em; */
+    /* margin-bottom: .25em; */
+    margin-top:0px;
+    background-color: rgb(191, 191, 191,.5);
     display: block;
     cursor: pointer;
 }
@@ -120,9 +126,10 @@ span, input {
     margin-inline-end: auto;
 }
 #songTitle {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.5em;
+    font-family: var(--title-font-family);
+    font-size: 1.75em;
     color: var(--light-font);
+    letter-spacing: var(--title-tracking);
 }
 
 /* input range styles */

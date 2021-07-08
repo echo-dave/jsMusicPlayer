@@ -4,27 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" type="text/css" href="normalize.css"> -->
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" type="text/css" href="slider.css">
+    <link rel="stylesheet" href="typography.css">
 
     <title>Basic MP3 Player</title>
 </head>
 <body>
-<div id="main"></div>
+<div id="main">
+    <p>Basic Static Audio Player 0.2.0</p>
 
-<div id="trackList">
-    <span class="track" onclick="loadAudio(`./WorldSpin 1.6.mp3`, this.innerText)">World Spin</span>
-    <span class="track" onclick="loadAudio(`./Falling Sun 1.7.mp3`, this.innerText)">Falling Sun</span>
+<!-- static track list  -->
+    <div id="trackListContainer">
+        <h1>Track List</h1>
+        <div id="trackList">
+            
+            <h2 class="track" onclick="loadAudio(`./WorldSpin 1.6.mp3`, this.innerText)">World Spin</h2>
+            <h2 class="track" onclick="loadAudio(`./Falling Sun 1.7.mp3`, this.innerText)">Falling Sun</h2>
+
+        </div>
+    </div>
+    
+<!-- javascript will populate the player onto the page here -->
+    <div id="player"></div>
 
 </div>
 
-<div id="player"></div>
-</body>
 <script src="./audio.js"></script>
-<script>
-   let main = document.getElementById('main');
-    main.innerHTML = "<h1>Basic Static Audio Player 0.1.0</h1>";
 
-</script>
+</body>
+
 </html>
