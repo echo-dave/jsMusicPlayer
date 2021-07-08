@@ -1,23 +1,34 @@
 #controls {
     display: block;
-    max-width: 320px;
+    width: 320px;
+    background: #2a2a2a;
+    padding: 0 1.5em;
+    box-sizing: border-box;
 }
 
+#playPause {
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    margin: .5rem .5rem .5rem 0;
 
+}
 
 .play {
     width:0;
     height:0;
     box-sizing: border-box;
-    margin: .5rem .5rem .5rem 0;
     /* background-color: green; */
     border-left: calc((.75rem + .75rem) * .866) solid green;
     border-top: .75rem  solid transparent;
     border-bottom: .75rem solid transparent;
-    display:none;
+    display:inline-block;
+    visibility: hidden;
+    margin: auto auto auto 0;
 }
 .pause {
-    display:none;
+    visibility: hidden;
+    display: inline-block;
     height:1rem;
     width: 1rem;
     border-left:  .4rem solid rgb(255, 200, 0);
@@ -25,8 +36,26 @@
     border-top: 0 none;
     border-bottom: 0 none;
     box-sizing: border-box;
-    margin: .5rem .5rem .5rem 0;
+    margin: auto auto auto 0;
 }
+#timeRemaining {
+    width: 4em;
+    display: inline-block;
+    position: relative;
+    top: -1em;
+    color: #d5d5d5;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .75em;
+}
+#playheadContainer {
+    display: inline-block;
+    width:150px; 
+    margin: auto auto auto 1em; 
+    box-sizing:border-box;
+    position: relative;
+    top: -1em;
+}
+
 #trackList {
     border: 1px; 
     border-radius: .25rem; 
@@ -49,6 +78,14 @@
     border: #000000 solid 1px;
     border-radius: .25rem;
     box-sizing: border-box;
+}
+#player figure {
+    margin-inline-start: 13px;
+    margin-inline-end: auto;
+}
+#songTitle {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5em;
 }
 
 /* input range styles */
