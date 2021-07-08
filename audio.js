@@ -11,12 +11,16 @@ function buildPlayer () {
         <figcaption>
             <span id="songTitle"></span>
         </figcaption>
-        <audio controls type="audio/mpeg">Your browser can't play this!</audio>
-        <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5">
-        <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
-        <div id="playPause"></div>
-        <span id="currentTime">0:00</span>
-        <span id="duration">0:00</span>
+        <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
+        <div id="controls">
+            <div id="playPause"></div>
+            <div style="display: inline-block; width:150px; margin: auto auto auto 2rem; box-sizing:border-box;">
+                <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
+            </div>
+            <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5">
+        </div>
+       
+        <span id="timeRemaining">0:00</span>
         
     </figure>`
 
@@ -24,7 +28,6 @@ function buildPlayer () {
     
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
-        console.log('clicked');
         audio.paused ? startPlay(audio) : stopPlay(audio);   
     })
 
@@ -35,15 +38,23 @@ function buildPlayer () {
         audio = document.querySelector("audio");
         pauseAudio(audio);
         audio.src = url;
-        console.log(`this ${this}, title ${title}`);
         
+        //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
             audio.addEventListener("timeupdate", () => {
             audio["data-time"] = true;
+            //move playead with playback
             document.querySelector("#playhead").value = audio.currentTime;
+            //calculate time remaining and update
+            let remainingTime = audio.duration - audio.currentTime;
+            timeRemaining(remainingTime);
         }) 
         }
+
+        //reset the playhead on file change
         document.querySelector("#playhead").value = 0;
+
+        //Make sure we have the needed metadata available before trying to apply title, length of audio
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio)
         } else {
@@ -61,20 +72,19 @@ function buildPlayer () {
         })
      }
      
-     function setDuration(audio) {
-         let minutes = Math.floor(audio.duration / 60);
-         let secs = Math.floor(audio.duration) % 60;
-         secs = secs.toString().padStart(2,'0');
-         document.querySelector("#duration").innerText = `${minutes} : ${secs}`;
+     
+     function timeRemaining(remainingTime) {
+        let currentRemainingTime = convertSecsToMinutes(remainingTime);
+        document.querySelector("#timeRemaining").innerText = `-${currentRemainingTime}`;
      }
 
      function changeVolume() {
         document.querySelector("audio").volume = volume.value;
     }
 
-    function applyAudioMetadata (audio, title) {
+    function applyAudioMetadata(audio, title) {
         setPlayheadMax(audio);
-        setDuration(audio);
+        timeRemaining(audio.duration);
         volume.addEventListener('input', () => changeVolume(audio));
         document.querySelector("#songTitle").innerText = title;
     }
@@ -87,21 +97,25 @@ function buildPlayer () {
     function pauseAudio(audio) {
         console.log('pauseAudio function');
         stopPlay(audio);  
-       
     }
 
     function startPlay(audio) {
         audio.play();
         playPause.className = "pause";
-        playPause.style.display = "block";
+        playPause.style.display = "inline-block";
         console.log('now playing');
     }
 
     function stopPlay(audio) {
         audio.pause();
         playPause.className="play";
-        playPause.style.display = "block";
+        playPause.style.display = "inline-block";
         console.log('now paused');
     }
 
-    
+    function convertSecsToMinutes(input) {
+        let minutes = Math.floor(input / 60);
+        let secs = Math.floor(input) % 60;
+        secs = secs.toString().padStart(2,'0');
+        return `${minutes}:${secs}`
+    }
