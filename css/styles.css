@@ -1,11 +1,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap');
 :root {
-    --light-font: rgb(231, 231, 231);
+    --light-font: var(--accent-color);
     --accent-color: rgb(216, 143, 247);
     --color-one: #fff;
     --slide-track: #656565;
-    /* --slide-handle: rgba(207, 207, 207, 0.894); */
     --slide-handle:var(--accent-color);
     --play-pause:var(--accent-color);
     --title-font-family: 'IBM Plex Mono', monospace;
@@ -50,7 +49,7 @@ span, input {
     border-top: .75em  solid transparent;
     border-bottom: .75em solid transparent;
     display:inline-block;
-    visibility: hidden;
+    visibility: visible;
     margin: auto auto auto 0;
 }
 .pause {

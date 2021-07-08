@@ -8,12 +8,12 @@ buildPlayer();
 function buildPlayer () {
     let song = 
     `<figure>
-        <figcaption>
-            <span id="songTitle">&nbsp;</span>
+        <figcaption style="text-align: center; margin-left:-13px;">
+            <span id="songTitle">--------</span>
         </figcaption>
         <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
         <div id="controls">
-            <div id="playPause"></div>
+            <div id="playPause" class="play"></div>
             <div id="playheadContainer">
                 <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
                 <span id="timeRemaining">0:00</span>
@@ -30,7 +30,9 @@ function buildPlayer () {
     
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
-        audio.paused ? startPlay(audio) : stopPlay(audio);   
+       if (typeof(audio) != "undefined") {
+            audio.paused ? startPlay(audio) : stopPlay(audio); 
+       } 
     })
 
 }
@@ -44,12 +46,12 @@ function buildPlayer () {
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
             audio.addEventListener("timeupdate", () => {
-            audio["data-time"] = true;
-            //move playead with playback
-            document.querySelector("#playhead").value = audio.currentTime;
-            //calculate time remaining and update
-            let remainingTime = audio.duration - audio.currentTime;
-            timeRemaining(remainingTime);
+                audio["data-time"] = true;
+                //move playead with playback
+                document.querySelector("#playhead").value = audio.currentTime;
+                //calculate time remaining and update
+                let remainingTime = audio.duration - audio.currentTime;
+                timeRemaining(remainingTime);
         }) 
         }
 
@@ -89,6 +91,7 @@ function buildPlayer () {
         timeRemaining(audio.duration);
         volume.addEventListener('input', () => changeVolume(audio));
         document.querySelector("#songTitle").innerText = title;
+        startPlay(audio)
     }
 
     function setPlayheadTime(audio, playhead) {
