@@ -1,12 +1,19 @@
+#controls {
+    display: block;
+    max-width: 320px;
+}
+
+
+
 .play {
     width:0;
     height:0;
     box-sizing: border-box;
     margin: .5rem .5rem .5rem 0;
     /* background-color: green; */
-    border-left: calc((1rem + 1rem) * .866) solid green;
-    border-top: 1rem  solid transparent;
-    border-bottom: 1rem solid transparent;
+    border-left: calc((.75rem + .75rem) * .866) solid green;
+    border-top: .75rem  solid transparent;
+    border-bottom: .75rem solid transparent;
     display:none;
 }
 .pause {
@@ -45,7 +52,7 @@
 }
 
 /* input range styles */
-input[type=range] {
+/* input[type=range] {
     height: 26px;
     -webkit-appearance: none;
     margin: 10px 0;
@@ -133,4 +140,4 @@ input[type=range] {
   }
   input[type=range]:focus::-ms-fill-upper {
     background: #ABABAB;
-  }
+  } */
