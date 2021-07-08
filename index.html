@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="slider.css">
-    <link rel="stylesheet" href="typography.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/slider.css">
+    <link rel="stylesheet" type="text/css" href="css/typography.css">
 
     <title>Basic MP3 Player</title>
 </head>
@@ -19,18 +19,18 @@
         <h1>Track List</h1>
         <div id="trackList">
             
-            <h2 class="track" onclick="loadAudio(`./WorldSpin 1.6.mp3`, this.innerText)">World Spin</h2>
-            <h2 class="track" onclick="loadAudio(`./Falling Sun 1.7.mp3`, this.innerText)">Falling Sun</h2>
+            <h2 class="track" onclick="loadAudio(`./music/WorldSpin 1.6.mp3`, this.innerText)">World Spin</h2>
+            <h2 class="track" onclick="loadAudio(`./music/Falling Sun 1.7.mp3`, this.innerText)">Falling Sun</h2>
 
         </div>
     </div>
-    
+
 <!-- javascript will populate the player onto the page here -->
     <div id="player"></div>
 
 </div>
 
-<script src="./audio.js"></script>
+<script src="./scripts/audio.js"></script>
 
 </body>
 
