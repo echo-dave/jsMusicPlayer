@@ -9,18 +9,18 @@ function buildPlayer () {
     let song = 
     `<figure>
         <figcaption>
-            <span id="songTitle"></span>
+            <span id="songTitle">&nbsp;</span>
         </figcaption>
         <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
         <div id="controls">
             <div id="playPause"></div>
-            <div style="display: inline-block; width:150px; margin: auto auto auto 2rem; box-sizing:border-box;">
+            <div id="playheadContainer" style="display: inline-block; width:150px; margin: auto auto auto 1em; box-sizing:border-box;">
                 <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
             </div>
+            <span id="timeRemaining">0:00</span>
             <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5">
         </div>
        
-        <span id="timeRemaining">0:00</span>
         
     </figure>`
 
@@ -56,7 +56,7 @@ function buildPlayer () {
 
         //Make sure we have the needed metadata available before trying to apply title, length of audio
         if (audio.readyState > 0 ) {
-            applyAudioMetadata(audio)
+            applyAudioMetadata(audio, title)
         } else {
             audio.addEventListener('loadedmetadata', () => {
                 applyAudioMetadata(audio, title)
@@ -102,14 +102,14 @@ function buildPlayer () {
     function startPlay(audio) {
         audio.play();
         playPause.className = "pause";
-        playPause.style.display = "inline-block";
+        playPause.style.visibility = "visible";
         console.log('now playing');
     }
 
     function stopPlay(audio) {
         audio.pause();
         playPause.className="play";
-        playPause.style.display = "inline-block";
+        playPause.style.visibility = "visible";
         console.log('now paused');
     }
 
