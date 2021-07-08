@@ -14,11 +14,13 @@ function buildPlayer () {
         <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
         <div id="controls">
             <div id="playPause"></div>
-            <div id="playheadContainer" style="display: inline-block; width:150px; margin: auto auto auto 1em; box-sizing:border-box;">
+            <div id="playheadContainer">
                 <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
+                <span id="timeRemaining">0:00</span>
             </div>
-            <span id="timeRemaining">0:00</span>
-            <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5">
+            <div id="wrapVolume">
+                <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5" >
+            </div>
         </div>
        
         
