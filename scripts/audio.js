@@ -8,13 +8,13 @@ buildPlayer();
 function buildPlayer () {
     let song = 
     `<figure>
-        <figcaption style="text-align: center; margin-left:-13px;">
+        <figcaption style="text-align: center;">
             <span id="songTitle">--------</span>
         </figcaption>
         <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
         <div id="controls">
             <div id="playPause" class="play"></div>
-            <div id="playheadContainer">
+            <div id="playheadContainer" class="center">
                 <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
                 <span id="timeRemaining">0:00</span>
             </div>
