@@ -32,7 +32,7 @@ input[type=range] {
     outline: none;
     background: var(--slide-track);
     border-radius: 8px;
-    width: 60%;
+    width: 64%;
 }
 
 #volume::-webkit-slider-thumb {
@@ -62,8 +62,15 @@ input[type=range] {
     height: 3em;
     width: 1em;
     float: right;
-    margin: auto 0 auto auto;
+    margin-right: -1%;
+    margin-top: .25em;
 }
+#wrapVolume:after {
+        content: "";
+        display: table;
+        clear: both;    
+}
+
 #volume {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
