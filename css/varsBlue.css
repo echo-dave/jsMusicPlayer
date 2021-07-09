@@ -1,0 +1,10 @@
+:root {
+    --light-font: var(--accent-color);
+    --accent-color: rgb(143, 200, 247);
+    --color-one: #fff;
+    --slide-track: #656565;
+    --slide-handle:var(--accent-color);
+    --play-pause:var(--accent-color);
+    --title-font-family: 'IBM Plex Mono', monospace;
+    --title-tracking:.15em;
+}
