@@ -1,12 +1,16 @@
+import {keyboardControlListener} from './keyboardControls.js';
+import {buildTracklist, trackData} from './tracklist.js';
+
 let player = document.getElementById('player');
-let audio; 
+let audio = {};
+let currentTrackIndex;
 
-
+buildTracklist();
 buildPlayer();
-
+keyboardControlListener();
 
 function buildPlayer () {
-    let song = 
+    let jsMusicPlayer = 
     `<figure>
         <figcaption style="text-align: center;">
             <span id="songTitle">--------</span>
@@ -26,25 +30,30 @@ function buildPlayer () {
         
     </figure>`
 
-    player.innerHTML = song;
-    
+    player.innerHTML = jsMusicPlayer;
+
+    volume = document.querySelector("#volume");
+    volume.addEventListener('input', () => changeVolume(audio));
+
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
-       if (typeof(audio) != "undefined") {
-            audio.paused ? startPlay(audio) : stopPlay(audio); 
-       } 
+      togglePlay(); 
     })
-
 }
+    const loadAudio = (id) => {
+        console.log(id);
+        const url = trackData[id].url;
+        const title = trackData[id].title;
+        currentTrackIndex = id;
 
-    let loadAudio =  (url, title) => {
         console.log(url);
         audio = document.querySelector("audio");
-        pauseAudio(audio);
+        stopPlay(audio);
         audio.src = url;
         
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
+            console.log("timeupdate listener added");
             audio.addEventListener("timeupdate", () => {
                 audio["data-time"] = true;
                 //move playead with playback
@@ -52,6 +61,7 @@ function buildPlayer () {
                 //calculate time remaining and update
                 let remainingTime = audio.duration - audio.currentTime;
                 timeRemaining(remainingTime);
+                console.log("timeupdate listener updated");
         }) 
         }
 
@@ -68,8 +78,10 @@ function buildPlayer () {
         }
     }
 
+    window.loadAudio = loadAudio;
+
     function setPlayheadMax(audio) {
-        let playhead = document.querySelector("#playhead");
+        const playhead = document.querySelector("#playhead");
         playhead.max =  Math.floor(audio.duration);
         playhead.addEventListener("input", () => {
         setPlayheadTime(audio, playhead);
@@ -89,19 +101,13 @@ function buildPlayer () {
     function applyAudioMetadata(audio, title) {
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
-        volume.addEventListener('input', () => changeVolume(audio));
         document.querySelector("#songTitle").innerText = title;
-        startPlay(audio)
+        startPlay(audio);
     }
 
     function setPlayheadTime(audio, playhead) {
         audio.currentTime = playhead.value;
         console.log(`audio duration: ${audio.duration} max scrubber: ${playhead.max}`);
-    }
-
-    function pauseAudio(audio) {
-        console.log('pauseAudio function');
-        stopPlay(audio);  
     }
 
     function startPlay(audio) {
@@ -119,8 +125,16 @@ function buildPlayer () {
     }
 
     function convertSecsToMinutes(input) {
-        let minutes = Math.floor(input / 60);
+        const minutes = Math.floor(input / 60);
         let secs = Math.floor(input) % 60;
         secs = secs.toString().padStart(2,'0');
         return `${minutes}:${secs}`
     }
+
+    function togglePlay() {
+        if (Object.keys(audio).length > 0) {
+            audio.paused ? startPlay(audio) : stopPlay(audio); 
+       } 
+    }
+
+    export {loadAudio, togglePlay, currentTrackIndex};

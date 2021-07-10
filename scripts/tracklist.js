@@ -18,8 +18,11 @@ let trackList = document.querySelector("#trackList");
 //     }
 // })
 
-trackData.forEach((track,index) => {
+const buildTracklist = () => { trackData.forEach((track,index) => {
     trackList.insertAdjacentHTML('beforeend',
-    `<h2 class="track" onclick=loadAudio(${index})>${track.title}</h2>`
+    `<h2 class="track" onclick=loadAudio(${index}) data-index="${index})">${track.title}</h2>`
     );
-}); 
+})};
+   
+
+export {buildTracklist, trackData};
