@@ -1,13 +1,14 @@
 import {togglePlay, currentTrackIndex} from './audio.js';
+import { trackData } from './tracklist.js';
 function keyboardControlListener() { document.addEventListener('keyup', e => {
     keyboardControls(e.code);
 })}
 
 function nextTrack() {
     console.log(`currentIndex: ${currentTrackIndex}`);
-    if (currentTrackIndex >= 0) {
+    if (currentTrackIndex >= 0 && currentTrackIndex < trackData.length - 1) {
         loadAudio(currentTrackIndex+1)
-    } else loadAudio(0);
+    } else if (typeof(currentTrackIndex) == "undefined") loadAudio(0);
 }
 
 function previousTrack() {
