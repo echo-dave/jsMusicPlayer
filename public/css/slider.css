@@ -7,7 +7,7 @@ input[type=range] {
 #playhead::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     height:1.5em;
-    width: calc(1.5em / 2);
+    width: 1.25em;
     cursor: pointer;
     background: var(--slide-handle);
     border: none;
@@ -17,7 +17,7 @@ input[type=range] {
 
 #playhead::-moz-range-thumb {
     height:1.5em;
-    width: calc(1.5em / 2);
+    width: 1.25em;
     cursor: pointer;
     background: var(--slide-handle);
     border: none;
@@ -37,8 +37,8 @@ input[type=range] {
 
 #volume::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
-    height:.75em;
-    width: .75em;
+    height:1.25em;
+    width: 1.25em;
     cursor: pointer;
     background: var(--slide-handle);
     border: none;
@@ -49,8 +49,8 @@ input[type=range] {
 }
 #volume::-moz-range-thumb {
     appearance: none;
-    height:.75em;
-    width: .75em;
+    height:1.25em;
+    width: 1.25em;
     cursor: pointer;
     background: var(--slide-handle);
     border: none;
