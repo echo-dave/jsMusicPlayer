@@ -35,6 +35,8 @@ function buildPlayer () {
             <div id="wrapVolume">
                 <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1" >
             </div>
+            <div class="controlsBg"></div>
+
         </div>
        
         
