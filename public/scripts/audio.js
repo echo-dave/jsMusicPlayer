@@ -7,15 +7,15 @@ let currentTrackIndex;
 let initializeContext = 0;
 
 //setup audioContext for volume control
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx;
 let sourceAudio = {};
+let gainNode;
 
 buildTracklist();
 buildPlayer();
 keyboardControlListener();
 
-let gainNode = audioCtx.createGain();
-gainNode.connect(audioCtx.destination);
+
 
 
 
@@ -43,7 +43,7 @@ function buildPlayer () {
     player.innerHTML = jsMusicPlayer;
     audio = document.querySelector("audio")
 
-    volume = document.querySelector("#volume");
+    let volume = document.querySelector("#volume");
     volume.addEventListener('input', () => changeVolume(audio));
 
     let playPause = document.querySelector("#playPause");
@@ -62,6 +62,9 @@ function buildPlayer () {
         stopPlay(audio);
         audio.src = url;
         if (initializeContext === 0) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = audioCtx.createGain();
+            gainNode.connect(audioCtx.destination);
             sourceAudio = audioCtx.createMediaElementSource(audio);
             sourceAudio.connect(gainNode);
             initializeContext = 1;
