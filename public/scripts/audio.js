@@ -5,9 +5,18 @@ let player = document.getElementById('player');
 let audio = {};
 let currentTrackIndex;
 
+//setup audioContext for volume control
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let sourceAudio = {};
+
 buildTracklist();
 buildPlayer();
 keyboardControlListener();
+
+let gainNode = audioCtx.createGain();
+gainNode.connect(audioCtx.destination);
+
+
 
 function buildPlayer () {
     let jsMusicPlayer = 
@@ -31,6 +40,7 @@ function buildPlayer () {
     </figure>`
 
     player.innerHTML = jsMusicPlayer;
+    audio = document.querySelector("audio")
 
     volume = document.querySelector("#volume");
     volume.addEventListener('input', () => changeVolume(audio));
@@ -50,6 +60,9 @@ function buildPlayer () {
         audio = document.querySelector("audio");
         stopPlay(audio);
         audio.src = url;
+        sourceAudio = audioCtx.createMediaElementSource(audio);
+        sourceAudio.connect(gainNode);
+
         
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
@@ -95,7 +108,9 @@ function buildPlayer () {
      }
 
      function changeVolume() {
-        document.querySelector("audio").volume = volume.value;
+        // document.querySelector("audio").volume = volume.value;
+        gainNode.gain.value = document.querySelector("#volume").value; //volume change through audioContext for mobile
+
     }
 
     function applyAudioMetadata(audio, title) {
