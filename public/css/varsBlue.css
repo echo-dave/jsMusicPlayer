@@ -7,4 +7,7 @@
     --play-pause:var(--accent-color);
     --title-font-family: 'IBM Plex Mono', monospace;
     --title-tracking:.15em;
+    --playheadContBorder: grey;
+    --player-background: #5c5c5c;
+    --conrols-bg-image: url('');
 }
