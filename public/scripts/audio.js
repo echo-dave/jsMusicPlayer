@@ -4,6 +4,7 @@ import {buildTracklist, trackData} from './tracklist.js';
 let player = document.getElementById('player');
 let audio = {};
 let currentTrackIndex;
+let initializeContext = 0;
 
 //setup audioContext for volume control
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -32,7 +33,7 @@ function buildPlayer () {
                 <span id="timeRemaining">0:00</span>
             </div>
             <div id="wrapVolume">
-                <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value=".5" >
+                <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1" >
             </div>
         </div>
        
@@ -60,8 +61,12 @@ function buildPlayer () {
         audio = document.querySelector("audio");
         stopPlay(audio);
         audio.src = url;
-        sourceAudio = audioCtx.createMediaElementSource(audio);
-        sourceAudio.connect(gainNode);
+        if (initializeContext === 0) {
+            sourceAudio = audioCtx.createMediaElementSource(audio);
+            sourceAudio.connect(gainNode);
+            initializeContext = 1;
+        }
+       
 
         
         //Make sure the listener for the playhead only gets added once
