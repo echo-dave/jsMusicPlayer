@@ -154,7 +154,9 @@ function buildPlayer () {
     function togglePlay() {
         if (Object.keys(audio).length > 0) {
             audio.paused ? startPlay(audio) : stopPlay(audio); 
-       } 
+       } else {
+           loadAudio(0);
+       }
     }
 
     export {loadAudio, togglePlay, currentTrackIndex};
