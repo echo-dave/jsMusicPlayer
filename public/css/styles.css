@@ -125,13 +125,14 @@ span, input {
 
 #trackList {
     border: 1px; 
-    border-radius: .25em; 
+    border-radius: .5em; 
     border-color: rgb(47, 47, 47);
     border-style: solid;
     max-width: 350px;
     box-sizing: border-box;
     background: var(--accent-color);
     white-space: nowrap;
+    overflow: hidden;
 }
 #trackList h2 {
     margin-top:0px;
@@ -146,7 +147,7 @@ span, input {
     width: 350px;
     max-width:100%;
     border: #000000 solid 1px;
-    border-radius: .25em;
+    border-radius: .5em;
     box-sizing: border-box;
     background: #5c5c5c;
     color: var(--color-one);
@@ -157,9 +158,27 @@ span, input {
     padding-left: 13px;
     padding-right: 13px;
 }
+
+#player figcaption {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 #songTitle {
     font-family: var(--title-font-family);
     font-size: 1.75em;
     color: var(--light-font);
     letter-spacing: var(--title-tracking);
+    display: inline-block;
+    white-space: nowrap;
 }
+/* scroll long titles */
+#songTitle.long {
+    animation: scroll 8s infinite linear;
+    padding-left: 100%; /*Initial offset*/
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(-100%);
+    }
+  }
