@@ -20,14 +20,13 @@ let options = {
 
 
 //routes
-app.use(express.static('./public', options));
-// app.use(express.static('node_modules/bulma/css'));
+app.use('/',express.static('./client/public', options));
 
 // require("./routes/html-routes.js")(app);
-// require("./routes/api-routes.js")(app);
+require("./routes/api-routes.js")(app);
 
 app.use(function (req, res) {
-    res.status(404).sendFile(__dirname + '/public/404.html');
+    res.status(404).sendFile(__dirname + '/client/public/404.html');
 });
 
 
