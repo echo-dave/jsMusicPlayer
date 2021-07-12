@@ -1,6 +1,6 @@
 import {keyboardControlListener} from './keyboardControls.js';
 import {buildTracklist, trackData} from './tracklist.js';
-import scrollingSongTitle from './scrollingSongTitle.js';
+import * as scrollingTitle from './scrollingSongTitle.js';
 
 let player = document.getElementById('player');
 let audio = {};
@@ -12,8 +12,8 @@ let audioCtx;
 let sourceAudio = {};
 let gainNode;
 
-buildTracklist();
 buildPlayer();
+buildTracklist();
 keyboardControlListener();
 
 function buildPlayer () {
@@ -85,12 +85,12 @@ function buildPlayer () {
         document.querySelector("#playhead").value = 0;
 
         //Make sure we have the needed metadata available before trying to apply title, length of audio
+        
+        // runApplyAudioMetadata = () => applyAudioMetadata(audio, title);
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio, title)
         } else {
-            audio.addEventListener('loadedmetadata', () => {
-                applyAudioMetadata(audio, title)
-            });
+            audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
         }
     }
 
@@ -121,8 +121,11 @@ function buildPlayer () {
         timeRemaining(audio.duration);
         const songTitle = document.querySelector("#songTitle")
         songTitle.innerText = title;
-        scrollingSongTitle(songTitle);
+        const songTitleParrent = document.querySelector('#player figcaption')
+        scrollingTitle.scroll(songTitle, songTitleParrent);
         startPlay(audio);
+        audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
+
     }
 
     function setPlayheadTime(audio, playhead) {
