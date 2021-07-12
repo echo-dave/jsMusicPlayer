@@ -1,10 +1,11 @@
-const scrollingSongTitle = (el) => {
-    let getScrollLength = (el) =>{ return el.scrollWidth};
-    let getClientlLength = (el) =>{ return el.clientWidth};
-
-    if (getScrollLength("#songTitle") > getClientlLength("#player figcaption")) {
-        el.classList.add('long')
-    };
+const scrollingSongTitle = (el1, el2) => {
+    el1.classList.remove('long');
+    let getScrollLength =  el1.scrollWidth;
+    let getClientlLength = el2.clientWidth;
+    if (getScrollLength > getClientlLength) {
+        console.log('long title');
+        el1.classList.add('long');
+    } 
 }
 
-export default scrollingSongTitle;
+export {scrollingSongTitle as scroll} ;
