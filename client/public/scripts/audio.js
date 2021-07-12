@@ -16,10 +16,6 @@ buildTracklist();
 buildPlayer();
 keyboardControlListener();
 
-
-
-
-
 function buildPlayer () {
     let jsMusicPlayer = 
     `<figure>
@@ -55,12 +51,10 @@ function buildPlayer () {
     })
 }
     const loadAudio = (id) => {
-        console.log(id);
         const url = trackData[id].url;
         const title = trackData[id].title;
         currentTrackIndex = id;
 
-        console.log(url);
         audio = document.querySelector("audio");
         stopPlay(audio);
         audio.src = url;
@@ -77,7 +71,6 @@ function buildPlayer () {
         
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
-            console.log("timeupdate listener added");
             audio.addEventListener("timeupdate", () => {
                 audio["data-time"] = true;
                 //move playead with playback
@@ -85,7 +78,6 @@ function buildPlayer () {
                 //calculate time remaining and update
                 let remainingTime = audio.duration - audio.currentTime;
                 timeRemaining(remainingTime);
-                console.log("timeupdate listener updated");
         }) 
         }
 
@@ -135,21 +127,18 @@ function buildPlayer () {
 
     function setPlayheadTime(audio, playhead) {
         audio.currentTime = playhead.value;
-        console.log(`audio duration: ${audio.duration} max scrubber: ${playhead.max}`);
     }
 
     function startPlay(audio) {
         audio.play();
         playPause.className = "pause";
         playPause.style.visibility = "visible";
-        console.log('now playing');
     }
 
     function stopPlay(audio) {
         audio.pause();
         playPause.className="play";
         playPause.style.visibility = "visible";
-        console.log('now paused');
     }
 
     function convertSecsToMinutes(input) {
