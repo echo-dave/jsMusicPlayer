@@ -6,12 +6,10 @@ let trackData;
 let trackList = document.querySelector("#trackList");
 
 const buildTracklist = () => { 
-    console.log(`request\n`, request);
     fetch(request).then(res => {
         // console.log('status call', res.status, '\n', 'res.result:', res.result, '\n ----\n', 'res',  res.json());
         if (res.status === 200) {
             res.json().then(res => {
-                console.log('json res:', res);
             trackData = res;
             trackData.forEach(track => {
                     trackList.insertAdjacentHTML('beforeend',
