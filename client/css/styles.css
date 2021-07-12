@@ -69,6 +69,7 @@ span, input {
     position: absolute;
     top: 1.2em;
     left: 1.4em;
+    cursor: pointer;
 }
 
 .play {
