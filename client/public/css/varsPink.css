@@ -12,3 +12,9 @@
     --controls-bg-img: url('../imgs/flower.jpg');
     --timeRemaining-bg: var(--player-background)
 }
+body {
+    background-color: rgb(69, 69, 69);
+}
+p  {
+    color: white;
+}
