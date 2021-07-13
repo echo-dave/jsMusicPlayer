@@ -171,6 +171,8 @@ span, input {
     box-sizing: border-box;
     background: var(--player-background);
     color: var(--color-one);
+    position: sticky;
+    top: 4em;
 }
 #player figure {
     margin-inline-start: auto;
