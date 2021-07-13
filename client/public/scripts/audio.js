@@ -22,7 +22,7 @@ function buildPlayer () {
         <figcaption style="text-align: center;">
             <span id="songTitle">--------</span>
         </figcaption>
-        <audio type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
+        <audio preload="auto" type="audio/mpeg">Your browser can't play this! We need Javascript enabled and a modern browser.</audio>       
         <div id="controls">
             <div id="playPause" class="play"></div>
             <div id="playheadContainer" class="center">
@@ -51,6 +51,7 @@ function buildPlayer () {
     })
 }
     const loadAudio = (id) => {
+        console.log('onload');
         const url = trackData[id].url;
         const title = trackData[id].title;
         currentTrackIndex = id;
@@ -58,6 +59,7 @@ function buildPlayer () {
         audio = document.querySelector("audio");
         stopPlay(audio);
         audio.src = url;
+        audio.load();
         if (initializeContext === 0) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             gainNode = audioCtx.createGain();
@@ -90,7 +92,7 @@ function buildPlayer () {
         if (audio.readyState > 0 ) {
             applyAudioMetadata(audio, title)
         } else {
-            audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
+            audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title), {once:true});
         }
     }
 
@@ -117,6 +119,7 @@ function buildPlayer () {
     }
 
     function applyAudioMetadata(audio, title) {
+        console.log('metta apply');
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
         const songTitle = document.querySelector("#songTitle")
@@ -124,7 +127,7 @@ function buildPlayer () {
         const songTitleParrent = document.querySelector('#player figcaption')
         scrollingTitle.scroll(songTitle, songTitleParrent);
         startPlay(audio);
-        audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
+        // audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
 
     }
 
@@ -132,13 +135,26 @@ function buildPlayer () {
         audio.currentTime = playhead.value;
     }
 
-    function startPlay(audio) {
-        audio.play();
+    function startPlay() {
+        console.log('audio: ', audio);
+        console.log('ready?', audio.readyState);
+        if (audio.readyState == 4){
+            playStart();
+        } else {
+        audio.addEventListener('canplaythrough', playStart, {once:true});
+        audio.addEventListener('ended', stopPlay, {once:true});
+        }
+        function playStart () {
+            console.log('playthrough'); 
+            audio.play();
+        };
+
         playPause.className = "pause";
         playPause.style.visibility = "visible";
     }
 
-    function stopPlay(audio) {
+    function stopPlay() {
+        console.log('stopped');
         audio.pause();
         playPause.className="play";
         playPause.style.visibility = "visible";
