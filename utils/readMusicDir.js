@@ -1,7 +1,5 @@
 const fs = require('fs/promises');
 
-const musicdir = '../jsMusicPlayer/public/music/';
-
 let files;
 let musicFiles = [];
 const playbackDir = '/music/';
@@ -16,7 +14,7 @@ module.exports = async (dir)  => {
 
             if (file.isFile()) {
                 console.log(`${file.name} is a file to process`)
-                musicFiles.push({url: playbackDir+file.name,title: file.name.slice(0,-4), id: index})
+                musicFiles.push({title: file.name.slice(0,-4), id: index})
             } else {
                 console.log(`${file.name} is not a file`);
             }             

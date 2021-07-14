@@ -3,18 +3,19 @@ import {buildTracklist, trackData} from './tracklist.js';
 import * as scrollingTitle from './scrollingSongTitle.js';
 
 let player = document.getElementById('player');
-let audio = {};
 let currentTrackIndex;
 let initializeContext = 0;
-
+let duration;
+let audio;
+let volume;
 //setup audioContext for volume control
-let audioCtx;
+let audioCtx = 'beans';
 let sourceAudio = {};
 let gainNode;
-
 buildPlayer();
 buildTracklist();
 keyboardControlListener();
+
 
 function buildPlayer () {
     let jsMusicPlayer = 
@@ -37,38 +38,54 @@ function buildPlayer () {
         </div>
        
         
-    </figure>`
+    </figure>
+    <span id='contextTime'></span>`
 
     player.innerHTML = jsMusicPlayer;
+
     audio = document.querySelector("audio")
-
-    let volume = document.querySelector("#volume");
+    volume = document.querySelector("#volume");
     volume.addEventListener('input', () => changeVolume(audio));
-
     let playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
-      togglePlay(); 
-    })
-}
-    const loadAudio = (id) => {
-        const url = trackData[id].url;
-        const title = trackData[id].title;
-        currentTrackIndex = id;
+    togglePlay(); 
+})
 
-        audio = document.querySelector("audio");
-        stopPlay(audio);
-        audio.src = url;
-        if (initializeContext === 0) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            gainNode = audioCtx.createGain();
-            gainNode.connect(audioCtx.destination);
-            sourceAudio = audioCtx.createMediaElementSource(audio);
-            sourceAudio.connect(gainNode);
+    
+}
+    async function loadAudio(id) {
+        let title = trackData[id].title;
+
+        if (initializeContext === 0) {   
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext({
+                latencyHint: 'playback',
+                sampleRate: 48000
+            });        
             initializeContext = 1;
         }
-       
+        audioCtx.onstatechange = () => console.log(audioCtx.state);
+        audioCtx.resume();
 
-        
+        const rquestStream = `/api/streamdata/${title}.mp3`;
+        const data = await fetch(rquestStream)
+        const stream = await data.arrayBuffer()
+        console.log("stream ", stream);
+    
+        const buffer = await audioCtx.decodeAudioData(stream);
+        sourceAudio = audioCtx.createBufferSource();
+        sourceAudio.buffer = buffer;
+        duration = buffer.duration;
+        console.log('song duration', duration);
+        console.log('buff:\n', sourceAudio);
+        gainNode = audioCtx.createGain();
+        gainNode.connect(audioCtx.destination);  
+        sourceAudio.connect(gainNode);
+
+        currentTrackIndex = id;
+
+        // stopPlay(audio);
+
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
             audio.addEventListener("timeupdate", () => {
@@ -85,13 +102,14 @@ function buildPlayer () {
         document.querySelector("#playhead").value = 0;
 
         //Make sure we have the needed metadata available before trying to apply title, length of audio
-        
-        // runApplyAudioMetadata = () => applyAudioMetadata(audio, title);
-        if (audio.readyState > 0 ) {
-            applyAudioMetadata(audio, title)
-        } else {
-            audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
-        }
+        console.log('loaded');
+        applyAudioMetadata(audio, title, sourceAudio, audioCtx);
+        // if (audio.readyState > 0 ) {
+        //     applyAudioMetadata(audio, title)
+        // } else {
+        //     audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
+        // }
+
     }
 
     window.loadAudio = loadAudio;
@@ -104,7 +122,14 @@ function buildPlayer () {
         })
      }
      
-     
+     function contextCurrentTime(duration){
+        let timestamp = audioCtx.getOutputTimestamp() 
+        setInterval(() => {
+            // console.log('timestamp ', Math.floor(audioCtx.getOutputTimestamp().contextTime));
+            document.querySelector('#contextTime').innerText = Math.floor(audioCtx.getOutputTimestamp().contextTime)
+         }, 1000);
+     }
+
      function timeRemaining(remainingTime) {
         let currentRemainingTime = convertSecsToMinutes(remainingTime);
         document.querySelector("#timeRemaining").innerText = `-${currentRemainingTime}`;
@@ -116,14 +141,17 @@ function buildPlayer () {
 
     }
 
-    function applyAudioMetadata(audio, title) {
+    function applyAudioMetadata(audio, title, sourceAudio, audioCtx) {
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
         const songTitle = document.querySelector("#songTitle")
         songTitle.innerText = title;
         const songTitleParrent = document.querySelector('#player figcaption')
         scrollingTitle.scroll(songTitle, songTitleParrent);
-        startPlay(audio);
+        // startPlay(audio, sourceAudio, audioCtx);
+        startPlay(audioCtx);
+        contextCurrentTime(duration);
+        console.log('audioCtx state meteadata: ', audioCtx.state);
         audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
 
     }
@@ -132,13 +160,31 @@ function buildPlayer () {
         audio.currentTime = playhead.value;
     }
 
-    function startPlay(audio) {
-        audio.play();
+    async function startPlay(audio) {
+        console.log('playing');
+        console.log('aduioctx ', audioCtx);
+        if (audioCtx.state !== "running") {
+            audioCtx.resume()
+            console.log('resuming audio');
+        } else {
+            console.log('audio running already');
+        }
+
+        // audio.play();
         playPause.className = "pause";
         playPause.style.visibility = "visible";
+        console.log('sourceAudio play: ', sourceAudio);
+        await sourceAudio.start(0);
+        console.log('stated  to resume');
+        audioCtx.resume();
+
+
     }
 
     function stopPlay(audio) {
+        console.log('sourceAudio stop: ', sourceAudio);
+        if (sourceAudio.status = "")
+        sourceAudio.stop();
         audio.pause();
         playPause.className="play";
         playPause.style.visibility = "visible";
@@ -152,11 +198,19 @@ function buildPlayer () {
     }
 
     function togglePlay() {
-        if (Object.keys(audio).length > 0) {
-            audio.paused ? startPlay(audio) : stopPlay(audio); 
-       } else {
-           loadAudio(0);
-       }
+        console.log('toggle');
+        audioCtx.resume();
+        if (buffer.length > 0)  {
+            
+        }
+
+    //     if (Object.keys(audio).length > 0) {
+    //         audio.paused ? startPlay(audio, audioCtx) : stopPlay(audio, audioCtx); 
+    //    } else {
+    //        loadAudio(0);
+    //    }
     }
+
+
 
     export {loadAudio, togglePlay, currentTrackIndex};
