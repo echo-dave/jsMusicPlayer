@@ -1,7 +1,5 @@
 const fs = require('fs/promises');
 
-const musicdir = '../jsMusicPlayer/public/music/';
-
 let files;
 let musicFiles = [];
 const playbackDir = '/music/';
