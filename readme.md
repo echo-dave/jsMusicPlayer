@@ -2,7 +2,7 @@
 
 ![Wide mobile JS Music Player](./githubImgs/wideJsMusicPlayer.jpg)
 
-[Scope](##Scope) | [Tech](##Tech) | [Future](##The-future) | [Usage](##Usage)
+[Scope](#Scope) | [Tech](#Tech) | [Future](#The-future) | [Usage](#Usage)
 ## The Story So Far
 I startd of working with the `<audio>` element and then realized that volume changes wouldn't work on mobile (or at least iOS). I'd looked at AudioContext a little previous and pieced that together the some odd quirks with Chrome and then Safari due to sturcturing and when AudioContext has to be intantiated. While there, I worked on converting everything ove to the Web Audio API. First off was working out out the fetch and node routes for streaming - except apparently fetch won't read as a stream (in Safari at least). After a lot of work had already gone into the conversion I concluded that it just wasn't going to work for mobile / slower network connections. In the end I went back to the `<audio>` element as source for the AudioContext. 
 
