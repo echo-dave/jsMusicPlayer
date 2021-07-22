@@ -52,6 +52,7 @@ function buildPlayer () {
     })
 }
     const loadAudio = (id) => {
+        document.querySelector('#songTitle').style.visibility = 'hidden';
         console.log('onload');
         const url = trackData[id].url;
         const title = trackData[id].title;
@@ -121,9 +122,9 @@ function buildPlayer () {
 
     function applyAudioMetadata(audio, title) {
         console.log('metta apply');
+        const songTitle = document.querySelector("#songTitle")
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
-        const songTitle = document.querySelector("#songTitle")
         songTitle.innerText = title;
         const songTitleParrent = document.querySelector('#player figcaption')
         scrollingTitle.scroll(songTitle, songTitleParrent);
