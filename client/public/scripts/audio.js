@@ -15,6 +15,7 @@ let gainNode;
 buildPlayer();
 buildTracklist();
 keyboardControlListener();
+trackListListener()
 
 function buildPlayer () {
     let jsMusicPlayer = 
@@ -173,6 +174,16 @@ function buildPlayer () {
        } else {
            loadAudio(0);
        }
+    }
+
+    function trackListListener(){
+        const trackList = document.querySelector("#trackList");
+        trackList.onclick = e => {
+            let target = e.target;
+            if (target.closest('.track')){
+                loadAudio(target.dataset.trackid)
+            }
+        }
     }
 
     export {loadAudio, togglePlay, currentTrackIndex};
