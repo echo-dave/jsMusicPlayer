@@ -13,7 +13,7 @@ const buildTracklist = () => {
             trackData = res;
             trackData.forEach(track => {
                     trackList.insertAdjacentHTML('beforeend',
-                    `<h2 class="track" onclick=loadAudio(${track.id})>${track.title}</h2>`
+                    `<h2 class="track" data-trackId="${track.id}">${track.title}</h2>`
                     )    
             });
         })

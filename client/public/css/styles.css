@@ -1,16 +1,3 @@
-
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap');
-/* :root {
-    --light-font: var(--accent-color);
-    --accent-color: rgb(216, 143, 247);
-    --color-one: #fff;
-    --slide-track: #656565;
-    --slide-handle:var(--accent-color);
-    --play-pause:var(--accent-color);
-    --title-font-family: 'IBM Plex Mono', monospace;
-    --title-tracking:.15em;
-} */
-
 span, input {
     font-size: inherit;
 }
