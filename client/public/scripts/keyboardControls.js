@@ -1,7 +1,9 @@
 import {togglePlay, currentTrackIndex} from './audio.js';
 import { trackData } from './tracklist.js';
+import {changeVolume} from './audio.js';
 function keyboardControlListener() { document.addEventListener('keyup', e => {
-    keyboardControls(e.code);
+    keyboardControls(e.altKey? `${e.code} ${e.altKey}` : e.code);
+    console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
 })}
 
 function nextTrack() {
@@ -24,10 +26,18 @@ function keyboardControls (code) {
 
         case "ArrowLeft": previousTrack();
             break;
+       
+        case "ArrowDown true": volumeKey('down');
+            break;
 
+        case "ArrowUp true": volumeKey('up');
+            break;
+        
         default:
             break;
     }
 }
+
+
 
 export {keyboardControlListener};
