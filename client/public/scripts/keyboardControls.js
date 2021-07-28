@@ -3,7 +3,7 @@ import { trackData } from './tracklist.js';
 import {changeVolume} from './audio.js';
 function keyboardControlListener() { document.addEventListener('keyup', e => {
     keyboardControls(e.altKey? `${e.code} ${e.altKey}` : e.code);
-    console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
+    // console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
 })}
 
 function nextTrack() {
@@ -39,12 +39,10 @@ function keyboardControls (code) {
 }
 
 function volumeKey(input) {
-    let volume = document.querySelector('#volume')
-    console.log('input volume: ' + volume.value);
-
-    //unclear why volume.value needs to be forced to number type for up volume only
-    if (input === "up") volume.value = Number(volume.value) + .1;
-    if (input === "down") volume.value -= .1;
+    const volume = document.querySelector('#volume')
+    let volumeValue = Number(volume.value);
+    if (input === "up") volume.value = volumeValue + .1;
+    if (input === "down") volume.value = volumeValue - .1;
     changeVolume()
 }
 
