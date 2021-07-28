@@ -43,10 +43,10 @@ function buildPlayer () {
     player.innerHTML = jsMusicPlayer;
     audio = document.querySelector("audio")
 
-    let volume = document.querySelector("#volume");
+    const volume = document.querySelector("#volume");
     volume.addEventListener('input', () => changeVolume(audio));
 
-    let playPause = document.querySelector("#playPause");
+    const playPause = document.querySelector("#playPause");
     playPause.addEventListener("click", () => {
       togglePlay(); 
     })
@@ -68,10 +68,9 @@ function buildPlayer () {
             gainNode.connect(audioCtx.destination);
             sourceAudio = audioCtx.createMediaElementSource(audio);
             sourceAudio.connect(gainNode);
+            gainNode.gain.value = document.querySelector("#volume").value;
             initializeContext = 1;
         }
-       
-
         
         //Make sure the listener for the playhead only gets added once
         if (!audio["data-time"]) {
@@ -116,7 +115,7 @@ function buildPlayer () {
 
      function changeVolume() {
         // document.querySelector("audio").volume = volume.value;
-        gainNode.gain.value = document.querySelector("#volume").value; //volume change through audioContext for mobile
+        typeof(gainNode) !== 'undefined' ? gainNode.gain.value = document.querySelector("#volume").value : null; //volume change through audioContext for mobile
 
     }
 
@@ -187,4 +186,4 @@ function buildPlayer () {
         }
     }
 
-    export {loadAudio, togglePlay, currentTrackIndex};
+    export {loadAudio, togglePlay, currentTrackIndex, changeVolume};
