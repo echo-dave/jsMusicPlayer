@@ -187,4 +187,4 @@ function buildPlayer () {
         }
     }
 
-    export {loadAudio, togglePlay, currentTrackIndex};
+    export {loadAudio, togglePlay, currentTrackIndex, changeVolume};
