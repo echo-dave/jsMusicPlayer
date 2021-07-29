@@ -5,6 +5,7 @@ import * as scrollingTitle from './scrollingSongTitle.js';
 let player = document.getElementById('player');
 let audio = {};
 let currentTrackIndex;
+let continuousPlayback = 0;
 let initializeContext = 0;
 
 //setup audioContext for volume control
@@ -142,9 +143,16 @@ function buildPlayer () {
         if (audio.readyState == 4){
             playStart();
         } else {
-        audio.addEventListener('canplaythrough', playStart, {once:true});
-        audio.addEventListener('ended', stopPlay, {once:true});
+            audio.addEventListener('canplaythrough', playStart, {once:true});
         }
+        const continuePlayback = function(){
+            if (continuousPlayback === 1 && currentTrackIndex < trackData.length -1) {
+                console.log(`next track: ${currentTrackIndex + 1}`);
+                loadAudio(Number(currentTrackIndex) + 1)
+            } else stopPlay()
+        }
+        audio.addEventListener('ended', continuePlayback, {once:true});
+
         function playStart () {
             console.log('playthrough'); 
             audio.play();
