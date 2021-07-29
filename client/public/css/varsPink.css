@@ -10,11 +10,17 @@
     --playheadContBorder:var(--slide-track);
     --player-background: rgb(45, 45, 45);
     --controls-bg-img: url('../imgs/flower.jpg');
-    --timeRemaining-bg: var(--player-background)
+    --timeRemaining-bg: var(--player-background);
+    --continousPlayOff: rgb(92,92,92);
 }
 body {
     background-color: rgb(69, 69, 69);
 }
 p  {
     color: white;
+}
+#continousPlaybackToggle {
+    background-color: var(--continousPlayOff);
+    border: 2px solid var(--accent-color);
+    color: #eee;
 }

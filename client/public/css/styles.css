@@ -173,6 +173,20 @@ span, input {
     white-space: nowrap;
 }
 
+#continousPlaybackToggle {
+    padding: 0;
+    height: 1.75em;
+    width: 1.75em;
+    overflow: hidden;
+    vertical-align: top;
+    border-radius: .25em .25em .25em .5em;
+    border: 1px solid black;
+    background-color: var(--accent-color);
+    position: absolute;
+    left: 1px;
+    bottom: 1px;
+}
+
 #songTitle {
     font-family: var(--title-font-family);
     font-size: 1.75em;

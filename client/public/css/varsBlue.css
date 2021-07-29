@@ -10,4 +10,11 @@
     --playheadContBorder: grey;
     --player-background: #5c5c5c;
     --conrols-bg-image: url('');
+    --continousPlayOff: rgb(140,140,140);
+
+}
+#continousPlaybackToggle {
+    background-color: var(--continousPlayOff);
+    border: 2px solid var(--accent-color);
+    color: #eee;
 }
