@@ -5,6 +5,7 @@ import * as scrollingTitle from './scrollingSongTitle.js';
 let player = document.getElementById('player');
 let audio = {};
 let currentTrackIndex;
+let continuousPlayback = 0;
 let initializeContext = 0;
 
 //setup audioContext for volume control
@@ -15,7 +16,8 @@ let gainNode;
 buildPlayer();
 buildTracklist();
 keyboardControlListener();
-trackListListener()
+trackListListener();
+listenforContinuousPlayback();
 
 function buildPlayer () {
     let jsMusicPlayer = 
@@ -37,7 +39,7 @@ function buildPlayer () {
 
         </div>
        
-        
+        <button id="continousPlaybackToggle" >&#8734;</button>
     </figure>`
 
     player.innerHTML = jsMusicPlayer;
@@ -142,9 +144,16 @@ function buildPlayer () {
         if (audio.readyState == 4){
             playStart();
         } else {
-        audio.addEventListener('canplaythrough', playStart, {once:true});
-        audio.addEventListener('ended', stopPlay, {once:true});
+            audio.addEventListener('canplaythrough', playStart, {once:true});
         }
+        const continuePlayback = function(){
+            if (continuousPlayback === 1 && currentTrackIndex < trackData.length -1) {
+                console.log(`next track: ${currentTrackIndex + 1}`);
+                loadAudio(Number(currentTrackIndex) + 1)
+            } else stopPlay()
+        }
+        audio.addEventListener('ended', continuePlayback, {once:true});
+
         function playStart () {
             console.log('playthrough'); 
             audio.play();
@@ -185,5 +194,31 @@ function buildPlayer () {
             }
         }
     }
+
+    function toggleContinuousPlayback() {
+        const toggleButton = document.getElementById('continousPlaybackToggle')
+
+        const startContinousPlayback = () => {
+            continuousPlayback = 1
+            toggleButton.style.background = 'var(--accent-color)';
+            toggleButton.style.border = '1px solid black';
+            toggleButton.style.color = 'black';
+        }
+        const stopContinousPlayback = () => {
+            continuousPlayback = 0
+            toggleButton.style.background = 'var(--continousPlayOff)';
+            toggleButton.style.border = '2px solid var(--accent-color)';
+            toggleButton.style.color = '#eee'
+        }
+
+        continuousPlayback === 0 ? startContinousPlayback() : stopContinousPlayback();
+        console.log('continuous status: ' + continuousPlayback);
+
+    }
+    
+    function listenforContinuousPlayback(){
+        document.getElementById('continousPlaybackToggle').onclick = toggleContinuousPlayback
+    }
+
 
     export {loadAudio, togglePlay, currentTrackIndex, changeVolume};

@@ -9,7 +9,7 @@ const scrollingSongTitle = (el1, el2) => {
             console.log('long title');
         }, 50);
        
-    }  
+    } else el1.style.visibility = null;
 }
 
 export {scrollingSongTitle as scroll} ;
