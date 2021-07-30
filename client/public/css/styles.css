@@ -161,12 +161,14 @@ span, input {
     color: var(--color-one);
     position: sticky;
     top: 4em;
+    bottom: unset;
 }
 #player figure {
     margin-inline-start: auto;
     margin-inline-end: auto;
     padding-left: 13px;
     padding-right: 13px;
+    position: relative;
 }
 
 #player figcaption {
@@ -185,7 +187,7 @@ span, input {
     background-color: var(--accent-color);
     position: absolute;
     left: 1px;
-    bottom: 1px;
+    bottom: -16px;
     font-size: 1em;
 }
 
