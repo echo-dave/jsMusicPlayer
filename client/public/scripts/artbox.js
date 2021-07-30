@@ -1,3 +1,4 @@
+import {artwork} from './audio.js';
 const songTitle = document.querySelector('#songTitle');
 songTitle.onclick = toggleArtBox;
 
@@ -15,42 +16,32 @@ function toggleArtBox(){
             console.log('beforeend');
             insertPosition = 'beforeend';
             appendArtBoxToPlayer();
-        }
-        //append arbox to top of player
-        if (player.clientHeight + player.clientWidth < window.innerHeight && player.styles.bottom !== 'auto') {
+        } else if (player.clientHeight + player.clientWidth < window.innerHeight && player.styles.bottom !== 'auto') {
+            //append arbox to top of player
             console.log('afterbegin');
             insertPosition  = 'afterbegin';
             appendArtBoxToPlayer();
-        }
-        //use a modal
-        if (player.clientHeight + player.clientWidth >= window.innerHeight) {
+        } else if (player.clientHeight + player.clientWidth >= window.innerHeight) {
+             //use a modal
             console.log('make modal');
             document.querySelector('body').insertAdjacentHTML('beforeend',`
-            <div id="artBox" style="height:${window.innerHeight * .9 + 'px'};
-            width:${window.innerHeight * .9 + 'px'};
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            background:grey;
-            z-index:2;
-            box-shadow: 0 0 1.5em .5em rgba(0,0,0,.5);
-            border-radius: .5em;
-            transform: translate(-50%, -50%);">
-            &nbsp
+            <div id="artBox" class="artBoxModal" style="height:${window.innerHeight * .9 + 'px'};
+            width:${window.innerHeight * .9 + 'px'};">
+            <img src="${artwork}" height="100%" width="100%" />
             </div>
             `)
             closeArtBox();
         }
-
-
+  
     function appendArtBoxToPlayer() {
+        let device = "";
+        insertPosition === 'beforeend' ? device = 'artBoxDesktop' : device = 'artboxMobile';
         player.insertAdjacentHTML(insertPosition,
         `
-        <div id="artBox" style="width:100%;background:grey">&nbsp;</div>
+        <div id="artBox" class="${device}"><img src=${artwork} width:100% height:100%/></div>
         `)
         const artBox = document.querySelector("#artBox")
         artBox.style.height = artBox.clientWidth + 'px';
-        console.log(`width:  ${artBox.clientWidth}`);
         closeArtBox();
 
     }
