@@ -13,5 +13,9 @@ function toggleArtBox(){
     artBox.style.height = artBox.clientWidth + 'px';
     console.log(`width:  ${artBox.clientWidth}`);
 
+    artBox.addEventListener('click', () =>{
+        artBox.remove();
+    }, {once: true})
+
     } else document.querySelector("#artBox").remove();
 }
