@@ -8,6 +8,9 @@ let currentTrackIndex;
 let continuousPlayback = 0;
 let initializeContext = 0;
 let artwork = "../imgs/helloCat.jpeg";
+const changeArtwork = function(url) {
+    artwork = url;
+}
 
 //setup audioContext for volume control
 let audioCtx;
@@ -222,4 +225,4 @@ function buildPlayer () {
     }
 
 
-    export {loadAudio, togglePlay, currentTrackIndex, changeVolume, artwork};
+    export {loadAudio, togglePlay, currentTrackIndex, changeVolume, artwork, changeArtwork};
