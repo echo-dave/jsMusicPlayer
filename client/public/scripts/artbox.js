@@ -7,7 +7,11 @@ function toggleArtBox(){
     if (!document.querySelector("#artBox")){
     player.insertAdjacentHTML("afterbegin",
     `
-    <div id="artBox" style="width:100%;height:100%;background:grey"></div>
+    <div id="artBox" style="width:100%;background:grey">&nbsp;</div>
     `)
+    const artBox = document.querySelector("#artBox")
+    artBox.style.height = artBox.clientWidth + 'px';
+    console.log(`width:  ${artBox.clientWidth}`);
+
     } else document.querySelector("#artBox").remove();
 }
