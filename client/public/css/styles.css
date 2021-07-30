@@ -191,6 +191,32 @@ span, input {
     font-size: 1em;
 }
 
+.artBoxModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background:grey;
+    z-index:2;
+    box-shadow: 0 0 1.5em .5em rgba(0,0,0,.5);
+    border-radius: .5em;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.artBoxDesktop {
+    width: 100%;
+    background:grey;
+    overflow: hidden;
+    border-radius: 0 0 .5em .5em;
+}
+
+.artboxMobile {
+    width:100%;
+    background:grey;
+    overflow: hidden;
+    border-radius: .5em .5em 0 0;
+}
+
 #songTitle {
     font-family: var(--title-font-family);
     font-size: 1.75em;
