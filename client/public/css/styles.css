@@ -14,6 +14,14 @@ span, input {
     transform: translate(-50%, -50%);
 }
 
+button {
+    background-color: rgb(41, 41, 41);
+    color: rgb(201, 201, 201);
+    font-size: 14px;
+    border-radius: .25em;
+    padding: .25em .5em;
+    border:none;
+}
 #controls {
     display: block;
     max-width: 320px;
