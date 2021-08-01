@@ -6,7 +6,7 @@ module.exports = async (trackName) => {
     exists = await fs.stat(trackPath);
     if (exists.isFile()) return trackPath
     } catch (err) {
-        function NoArtwork (message, status) {
+        function NoArtwork (message) {
             this.message = message;
             this.status = 204;
             this.name = "ArtError";
