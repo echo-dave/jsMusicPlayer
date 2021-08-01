@@ -1,22 +1,26 @@
 import {artwork} from './audio.js';
 
-const songTitle = document.querySelector('#songTitle');
+const songTitle = document.querySelector('#player figcaption');
 songTitle.onclick = toggleArtBox;
 
 const player = document.querySelector('#player');
-player.addEventListener('newArt', changeArt);
+player.addEventListener('newArt', () => {
+    changeArt();
+    if (artwork){
+        if (!document.body.contains(document.querySelector('#artBox'))) {
+        toggleArtBox();
+    }} 
+    if (!artwork && document.querySelector("#artBox")) toggleArtBox();
+});
 
 function toggleArtBox(){
     player.styles = getComputedStyle(player);
-    console.log('bottom: ' + player.style.bottom);
 
-    if (!document.querySelector("#artBox")){
-        console.log('artBox!');
+    if (!document.querySelector("#artBox")){            
         const body = document.querySelector('body')
         let insertPosition = "";
         //append arbox to bottom of player
         if (player.clientHeight + player.clientWidth < window.innerHeight && player.styles.top !== 'auto') {
-            console.log('beforeend');
             insertPosition = 'beforeend';
             appendArtBoxToPlayer();
         } else if (player.clientHeight + player.clientWidth < window.innerHeight && player.styles.bottom !== 'auto') {
@@ -60,8 +64,10 @@ function closeArtBox () {
 
  function changeArt() {
      const artBoxImg = document.querySelector('#artBox img');
-     if (artBoxImg) {
-        const changeImgSrc = (url)=> artBoxImg.src = url;
-        changeImgSrc(artwork);
-     }
+    if (artBoxImg) {
+        // if (artBoxImg.src != artwork) {
+            const changeImgSrc = (url)=> document.querySelector('#artBox img').src = url;
+            changeImgSrc(artwork);
+        // }
+    }
 }
