@@ -3,18 +3,25 @@ const incomingArt = new Event('newArt');
 
 export default async (trackTitle) => {
     try {
-        let data = await fetch(`/api/artwork/${trackTitle}`);
-        if (data.status === 200) {
-            let artJpeg = await data.blob();
-            let artJpegUrl = URL.createObjectURL(artJpeg)
+        if (window.artJpegUrl)window.URL.revokeObjectURL(window.artJpegUrl);
+        let artJpeg = "";
+        let artJpegUrl;
+        
+        const updateArtwork = function () {
             changeArtwork(artJpegUrl);
-        }
-        if (data.sttaus === 204) {
-            let artJpegUrl = ""
             document.querySelector('#player').dispatchEvent(incomingArt);
         }
+
+        let data = await fetch(`/api/artwork/${trackTitle}`);
+        if (data.status === 200) {
+            artJpeg = await data.blob();
+            artJpegUrl = URL.createObjectURL(artJpeg)
+            console.log('url', artJpegUrl );
+            window.artJpegUrl = artJpegUrl;
+            updateArtwork()
+        } else if (data.status === 204) updateArtwork();
     } catch (err) {
-        // console.log('get err: ', err);
+        console.log('get err: ', err);
     } 
 
 
