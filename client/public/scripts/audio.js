@@ -60,8 +60,6 @@ function buildPlayer () {
 }
     const loadAudio = (id) => {
         document.querySelector('#songTitle').style.visibility = 'hidden';
-        console.log('onload');
-        console.log(trackData);
         const url = trackData[id].url;
         const title = trackData[id].title;
         getArtwork(title);
@@ -127,7 +125,6 @@ function buildPlayer () {
     }
 
     function applyAudioMetadata(audio, title) {
-        console.log('metta apply');
         const songTitle = document.querySelector("#songTitle")
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
