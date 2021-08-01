@@ -1,10 +1,12 @@
-import {artwork, changeArtwork} from './audio.js';
+import {artwork} from './audio.js';
+
 const songTitle = document.querySelector('#songTitle');
 songTitle.onclick = toggleArtBox;
-const incomingArt = new Event('newArt');
+
+const player = document.querySelector('#player');
+player.addEventListener('newArt', changeArt);
 
 function toggleArtBox(){
-    const player = document.querySelector('#player');
     player.styles = getComputedStyle(player);
     console.log('bottom: ' + player.style.bottom);
 
@@ -46,7 +48,6 @@ function toggleArtBox(){
             closeArtBox();
 
         }
-        artBox.addEventListener('newArt', changeArt);
 
     } else document.querySelector("#artBox").remove();
 }
@@ -57,27 +58,10 @@ function closeArtBox () {
     }, {once: true})
 }
 
-(function button() {
-    document.querySelector('body #main p').insertAdjacentHTML('beforeend',
-    `<button onclick='fireArtEvent()'>change art</button>`
-    )
-})()
-
  function changeArt() {
-    const changeImgSrc = (url)=> document.querySelector('#artBox img').src = url;
-    if (artwork.match(/(\/imgs\/helloCat\.jpeg)$/g)) {
-        changeArtwork('../imgs/flower.jpg');
+     const artBoxImg = document.querySelector('#artBox img');
+     if (artBoxImg) {
+        const changeImgSrc = (url)=> artBoxImg.src = url;
         changeImgSrc(artwork);
-        console.log('flower');
-    }
-    else {
-        console.log('else');
-        changeArtwork('../imgs/helloCat.jpeg');
-        changeImgSrc(artwork);
-    }
-}
-
-window.fireArtEvent = function () {
-    document.querySelector('#artBox').dispatchEvent(incomingArt);
-    console.log('event fired');
+     }
 }
