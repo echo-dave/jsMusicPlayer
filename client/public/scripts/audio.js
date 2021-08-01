@@ -103,8 +103,6 @@ function buildPlayer () {
         }
     }
 
-    window.loadAudio = loadAudio;
-
     function setPlayheadMax(audio) {
         const playhead = document.querySelector("#playhead");
         playhead.max =  Math.floor(audio.duration);
