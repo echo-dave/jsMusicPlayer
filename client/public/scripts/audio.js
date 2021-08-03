@@ -1,12 +1,17 @@
 import {keyboardControlListener} from './keyboardControls.js';
 import {buildTracklist, trackData} from './tracklist.js';
 import * as scrollingTitle from './scrollingSongTitle.js';
+import getArtwork from './getTrackArtwork.js';
 
 let player = document.getElementById('player');
 let audio = {};
 let currentTrackIndex;
 let continuousPlayback = 0;
 let initializeContext = 0;
+let artwork = "";
+const changeArtwork = function(url) {
+    artwork = url;
+}
 
 //setup audioContext for volume control
 let audioCtx;
@@ -55,9 +60,9 @@ function buildPlayer () {
 }
     const loadAudio = (id) => {
         document.querySelector('#songTitle').style.visibility = 'hidden';
-        console.log('onload');
         const url = trackData[id].url;
         const title = trackData[id].title;
+        getArtwork(title);
         currentTrackIndex = id;
 
         audio = document.querySelector("audio");
@@ -99,8 +104,6 @@ function buildPlayer () {
         }
     }
 
-    window.loadAudio = loadAudio;
-
     function setPlayheadMax(audio) {
         const playhead = document.querySelector("#playhead");
         playhead.max =  Math.floor(audio.duration);
@@ -122,7 +125,6 @@ function buildPlayer () {
     }
 
     function applyAudioMetadata(audio, title) {
-        console.log('metta apply');
         const songTitle = document.querySelector("#songTitle")
         setPlayheadMax(audio);
         timeRemaining(audio.duration);
@@ -139,8 +141,7 @@ function buildPlayer () {
     }
 
     function startPlay() {
-        console.log('audio: ', audio);
-        console.log('ready?', audio.readyState);
+        // console.log('ready?', audio.readyState);
         if (audio.readyState == 4){
             playStart();
         } else {
@@ -155,7 +156,6 @@ function buildPlayer () {
         audio.addEventListener('ended', continuePlayback, {once:true});
 
         function playStart () {
-            console.log('playthrough'); 
             audio.play();
         };
 
@@ -164,7 +164,6 @@ function buildPlayer () {
     }
 
     function stopPlay() {
-        console.log('stopped');
         audio.pause();
         playPause.className="play";
         playPause.style.visibility = "visible";
@@ -190,7 +189,8 @@ function buildPlayer () {
         trackList.onclick = e => {
             let target = e.target;
             if (target.closest('.track')){
-                loadAudio(target.dataset.trackid)
+                let trackIndex = findTrackIndex(Number(target.dataset.trackid));
+                loadAudio(trackIndex);
             }
         }
     }
@@ -220,5 +220,11 @@ function buildPlayer () {
         document.getElementById('continousPlaybackToggle').onclick = toggleContinuousPlayback
     }
 
+    function findTrackIndex(input) {
+        return trackData.findIndex( track => {
+           return track.id === input
+        })
+    }
 
-    export {loadAudio, togglePlay, currentTrackIndex, changeVolume};
+
+    export {loadAudio, togglePlay, currentTrackIndex, changeVolume, artwork, changeArtwork};

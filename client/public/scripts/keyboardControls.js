@@ -1,6 +1,6 @@
 import {togglePlay, currentTrackIndex} from './audio.js';
 import { trackData } from './tracklist.js';
-import {changeVolume} from './audio.js';
+import {loadAudio, changeVolume} from './audio.js';
 function keyboardControlListener() { document.addEventListener('keyup', e => {
     keyboardControls(e.altKey? `${e.code} ${e.altKey}` : e.code);
     // console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
