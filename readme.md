@@ -72,7 +72,7 @@ import {keyboardControlListener} from './keyboardControls.js';
 ```
 from `audio.js`
 
-![JS Music Player blue](./githubImgs/blue.jpg) ![JS MusicPlayer magenta](./githubImgs/magenta.jpg)
+![JS Music Player mobile](./githubImgs/mobileV.jpg)
 
 ---
 ## The future
