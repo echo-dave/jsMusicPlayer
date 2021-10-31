@@ -1,10 +1,17 @@
 const fs = require('fs/promises');
 const path = require('path');
 module.exports = async (trackName) => {
+    const defaultImage = path.resolve(process.env.MUSICDIR +'/defaultImage.jpg')
     const trackPath = path.resolve(process.env.MUSICDIR +'/'+ trackName);
     try {
-    exists = await fs.stat(trackPath);
-    if (exists.isFile()) return trackPath
+    const exists = await fs.stat(trackPath);
+    if (exists.isFile()) {return trackPath}
+    else {
+        const defaultExists = await fs.stat(defaultImage)
+        if (defaultExists.isFile()) {
+            return defaultImage
+        }
+    }
     } catch (err) {
         function NoArtwork (message) {
             this.message = message;
