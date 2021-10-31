@@ -1,5 +1,5 @@
 document.querySelector('body #main p').insertAdjacentHTML('beforeend',`
-<button id="help">Info</button>
+<button id="help" style="cursor:pointer">Info</button>
 `)
 
 document.querySelector('#help').onclick = ()=>{
