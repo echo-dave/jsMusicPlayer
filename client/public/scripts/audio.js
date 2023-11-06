@@ -1,32 +1,32 @@
-import {keyboardControlListener} from './keyboardControls.js';
-import {buildTracklist, trackData} from './tracklist.js';
-import * as scrollingTitle from './scrollingSongTitle.js';
-import getArtwork from './getTrackArtwork.js';
+import { keyboardControlListener } from './keyboardControls.js'
+import { buildTracklist, trackData } from './tracklist.js'
+import * as scrollingTitle from './scrollingSongTitle.js'
+import getArtwork from './getTrackArtwork.js'
+import removePlayIndicator from './removePlayIndicator.js'
 
-let player = document.getElementById('player');
-let audio = {};
-let currentTrackIndex;
-let continuousPlayback = 0;
-let initializeContext = 0;
-let artwork = "";
-const changeArtwork = function(url) {
-    artwork = url;
+let player = document.getElementById('player')
+let audio = {}
+let currentTrackIndex
+let continuousPlayback = 0
+let initializeContext = 0
+let artwork = ''
+const changeArtwork = function (url) {
+    artwork = url
 }
 
 //setup audioContext for volume control
-let audioCtx;
-let sourceAudio = {};
-let gainNode;
+let audioCtx
+let sourceAudio = {}
+let gainNode
 
-buildPlayer();
-buildTracklist();
-keyboardControlListener();
-trackListListener();
-listenforContinuousPlayback();
+buildPlayer()
+buildTracklist()
+keyboardControlListener()
+trackListListener()
+listenforContinuousPlayback()
 
-function buildPlayer () {
-    let jsMusicPlayer = 
-    `<figure>
+function buildPlayer() {
+    let jsMusicPlayer = `<figure>
         <figcaption style="text-align: center;">
             <span id="songTitle">--------</span>
         </figcaption>
@@ -47,187 +47,203 @@ function buildPlayer () {
         <button id="continousPlaybackToggle" >&#8734;</button>
     </figure>`
 
-    player.innerHTML = jsMusicPlayer;
-    audio = document.querySelector("audio")
+    player.innerHTML = jsMusicPlayer
+    audio = document.querySelector('audio')
 
-    const volume = document.querySelector("#volume");
-    volume.addEventListener('input', () => changeVolume(audio));
+    const volume = document.querySelector('#volume')
+    volume.addEventListener('input', () => changeVolume(audio))
 
-    const playPause = document.querySelector("#playPause");
-    playPause.addEventListener("click", () => {
-      togglePlay(); 
+    const playPause = document.querySelector('#playPause')
+    playPause.addEventListener('click', () => {
+        togglePlay()
     })
 }
-    const loadAudio = (id) => {
-        document.querySelector('#songTitle').style.visibility = 'hidden';
-        const url = trackData[id].url;
-        const title = trackData[id].title;
-        getArtwork(title);
-        currentTrackIndex = id;
+const loadAudio = (id) => {
+    document.querySelector('#songTitle').style.visibility = 'hidden'
+    const url = trackData[id].url
+    const title = trackData[id].title
+    getArtwork(title)
+    currentTrackIndex = id
 
-        audio = document.querySelector("audio");
-        stopPlay(audio);
-        audio.src = url;
-        audio.load();
-        if (initializeContext === 0) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            gainNode = audioCtx.createGain();
-            gainNode.connect(audioCtx.destination);
-            sourceAudio = audioCtx.createMediaElementSource(audio);
-            sourceAudio.connect(gainNode);
-            gainNode.gain.value = document.querySelector("#volume").value;
-            initializeContext = 1;
-        }
-        
-        //Make sure the listener for the playhead only gets added once
-        if (!audio["data-time"]) {
-            audio.addEventListener("timeupdate", () => {
-                audio["data-time"] = true;
-                //move playead with playback
-                document.querySelector("#playhead").value = audio.currentTime;
-                //calculate time remaining and update
-                let remainingTime = audio.duration - audio.currentTime;
-                timeRemaining(remainingTime);
-        }) 
-        }
-
-        //reset the playhead on file change
-        document.querySelector("#playhead").value = 0;
-
-        //Make sure we have the needed metadata available before trying to apply title, length of audio
-        
-        // runApplyAudioMetadata = () => applyAudioMetadata(audio, title);
-        if (audio.readyState > 0 ) {
-            applyAudioMetadata(audio, title)
-        } else {
-            audio.addEventListener('loadedmetadata', () => applyAudioMetadata(audio, title), {once:true});
-        }
+    audio = document.querySelector('audio')
+    stopPlay(audio)
+    audio.src = url
+    audio.load()
+    if (initializeContext === 0) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        gainNode = audioCtx.createGain()
+        gainNode.connect(audioCtx.destination)
+        sourceAudio = audioCtx.createMediaElementSource(audio)
+        sourceAudio.connect(gainNode)
+        gainNode.gain.value = document.querySelector('#volume').value
+        initializeContext = 1
     }
 
-    function setPlayheadMax(audio) {
-        const playhead = document.querySelector("#playhead");
-        playhead.max =  Math.floor(audio.duration);
-        playhead.addEventListener("input", () => {
-        setPlayheadTime(audio, playhead);
-        })
-     }
-     
-     
-     function timeRemaining(remainingTime) {
-        let currentRemainingTime = convertSecsToMinutes(remainingTime);
-        document.querySelector("#timeRemaining").innerText = `-${currentRemainingTime}`;
-     }
-
-     function changeVolume() {
-        // document.querySelector("audio").volume = volume.value;
-        typeof(gainNode) !== 'undefined' ? gainNode.gain.value = document.querySelector("#volume").value : null; //volume change through audioContext for mobile
-
-    }
-
-    function applyAudioMetadata(audio, title) {
-        const songTitle = document.querySelector("#songTitle")
-        setPlayheadMax(audio);
-        timeRemaining(audio.duration);
-        songTitle.innerText = title;
-        const songTitleParrent = document.querySelector('#player figcaption')
-        scrollingTitle.scroll(songTitle, songTitleParrent);
-        startPlay(audio);
-        // audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
-
-    }
-
-    function setPlayheadTime(audio, playhead) {
-        audio.currentTime = playhead.value;
-    }
-
-    function startPlay() {
-        // console.log('ready?', audio.readyState);
-        if (audio.readyState == 4){
-            playStart();
-        } else {
-            audio.addEventListener('canplaythrough', playStart, {once:true});
-        }
-        const continuePlayback = function(){
-            if (continuousPlayback === 1 && currentTrackIndex < trackData.length -1) {
-                console.log(`next track: ${currentTrackIndex + 1}`);
-                loadAudio(Number(currentTrackIndex) + 1)
-            } else stopPlay()
-        }
-        audio.addEventListener('ended', continuePlayback, {once:true});
-
-        function playStart () {
-            audio.play();
-        };
-
-        playPause.className = "pause";
-        playPause.style.visibility = "visible";
-    }
-
-    function stopPlay() {
-        audio.pause();
-        playPause.className="play";
-        playPause.style.visibility = "visible";
-    }
-
-    function convertSecsToMinutes(input) {
-        const minutes = Math.floor(input / 60);
-        let secs = Math.floor(input) % 60;
-        secs = secs.toString().padStart(2,'0');
-        return `${minutes}:${secs}`
-    }
-
-    function togglePlay() {
-        if (Object.keys(audio).length > 0) {
-            audio.paused ? startPlay(audio) : stopPlay(audio); 
-       } else {
-           loadAudio(0);
-       }
-    }
-
-    function trackListListener(){
-        const trackList = document.querySelector("#trackList");
-        trackList.onclick = e => {
-            let target = e.target;
-            if (target.closest('.track')){
-                let trackIndex = findTrackIndex(Number(target.dataset.trackid));
-                let outGoingTrack = document.querySelector('.nowPlaying')
-                if (outGoingTrack) outGoingTrack.classList.remove('nowPlaying')
-                document.querySelector(`[data-trackid='${target.dataset.trackid}']`).classList.add('nowPlaying')
-                loadAudio(trackIndex);
-            }
-        }
-    }
-
-    function toggleContinuousPlayback() {
-        const toggleButton = document.getElementById('continousPlaybackToggle')
-
-        const startContinousPlayback = () => {
-            continuousPlayback = 1
-            toggleButton.style.background = 'var(--accent-color)';
-            toggleButton.style.border = '1px solid black';
-            toggleButton.style.color = 'black';
-        }
-        const stopContinousPlayback = () => {
-            continuousPlayback = 0
-            toggleButton.style.background = 'var(--continousPlayOff)';
-            toggleButton.style.border = '2px solid var(--accent-color)';
-            toggleButton.style.color = '#eee'
-        }
-
-        continuousPlayback === 0 ? startContinousPlayback() : stopContinousPlayback();
-        console.log('continuous status: ' + continuousPlayback);
-
-    }
-    
-    function listenforContinuousPlayback(){
-        document.getElementById('continousPlaybackToggle').onclick = toggleContinuousPlayback
-    }
-
-    function findTrackIndex(input) {
-        return trackData.findIndex( track => {
-           return track.id === input
+    //Make sure the listener for the playhead only gets added once
+    if (!audio['data-time']) {
+        audio.addEventListener('timeupdate', () => {
+            audio['data-time'] = true
+            //move playead with playback
+            document.querySelector('#playhead').value = audio.currentTime
+            //calculate time remaining and update
+            let remainingTime = audio.duration - audio.currentTime
+            timeRemaining(remainingTime)
         })
     }
 
+    //reset the playhead on file change
+    document.querySelector('#playhead').value = 0
 
-    export {loadAudio, togglePlay, currentTrackIndex, changeVolume, artwork, changeArtwork};
+    //Make sure we have the needed metadata available before trying to apply title, length of audio
+
+    // runApplyAudioMetadata = () => applyAudioMetadata(audio, title);
+    if (audio.readyState > 0) {
+        applyAudioMetadata(audio, title)
+    } else {
+        audio.addEventListener(
+            'loadedmetadata',
+            () => applyAudioMetadata(audio, title),
+            { once: true }
+        )
+    }
+}
+
+function setPlayheadMax(audio) {
+    const playhead = document.querySelector('#playhead')
+    playhead.max = Math.floor(audio.duration)
+    playhead.addEventListener('input', () => {
+        setPlayheadTime(audio, playhead)
+    })
+}
+
+function timeRemaining(remainingTime) {
+    let currentRemainingTime = convertSecsToMinutes(remainingTime)
+    document.querySelector(
+        '#timeRemaining'
+    ).innerText = `-${currentRemainingTime}`
+}
+
+function changeVolume() {
+    // document.querySelector("audio").volume = volume.value;
+    typeof gainNode !== 'undefined'
+        ? (gainNode.gain.value = document.querySelector('#volume').value)
+        : null //volume change through audioContext for mobile
+}
+
+function applyAudioMetadata(audio, title) {
+    const songTitle = document.querySelector('#songTitle')
+    setPlayheadMax(audio)
+    timeRemaining(audio.duration)
+    songTitle.innerText = title
+    const songTitleParrent = document.querySelector('#player figcaption')
+    scrollingTitle.scroll(songTitle, songTitleParrent)
+    startPlay(audio)
+    // audio.removeEventListener('loadedmetadata', () => applyAudioMetadata(audio, title));
+}
+
+function setPlayheadTime(audio, playhead) {
+    audio.currentTime = playhead.value
+}
+
+function startPlay() {
+    audio.addEventListener(
+        'loadeddata',
+        (e) => {
+            if (audio.readyState == 4) audio.play()
+        },
+        { once: true }
+    )
+
+    playPause.className = 'pause'
+    playPause.style.visibility = 'visible'
+}
+const continuePlayback = function () {
+    if (continuousPlayback === 1 && currentTrackIndex < trackData.length - 1) {
+        removePlayIndicator()
+        document
+            .querySelector(
+                `[data-trackid='${trackData[currentTrackIndex + 1].id}']`
+            )
+            .classList.add('nowPlaying')
+        loadAudio(Number(currentTrackIndex) + 1)
+    } else stopPlay()
+}
+audio.addEventListener('ended', continuePlayback)
+
+function stopPlay() {
+    audio.pause()
+    playPause.className = 'play'
+    playPause.style.visibility = 'visible'
+}
+
+function convertSecsToMinutes(input) {
+    const minutes = Math.floor(input / 60)
+    let secs = Math.floor(input) % 60
+    secs = secs.toString().padStart(2, '0')
+    return `${minutes}:${secs}`
+}
+
+function togglePlay() {
+    if (Object.keys(audio).length > 0) {
+        audio.paused ? startPlay(audio) : stopPlay(audio)
+    } else {
+        loadAudio(0)
+    }
+}
+
+function trackListListener() {
+    const trackList = document.querySelector('#trackList')
+    trackList.onclick = (e) => {
+        let target = e.target
+        if (target.closest('.track')) {
+            let trackIndex = findTrackIndex(Number(target.dataset.trackid))
+            removePlayIndicator()
+            document
+                .querySelector(`[data-trackid='${target.dataset.trackid}']`)
+                .classList.add('nowPlaying')
+            loadAudio(trackIndex)
+        }
+    }
+}
+
+function toggleContinuousPlayback() {
+    const toggleButton = document.getElementById('continousPlaybackToggle')
+
+    const startContinousPlayback = () => {
+        continuousPlayback = 1
+        toggleButton.style.background = 'var(--accent-color)'
+        toggleButton.style.border = '1px solid black'
+        toggleButton.style.color = 'black'
+    }
+    const stopContinousPlayback = () => {
+        continuousPlayback = 0
+        toggleButton.style.background = 'var(--continousPlayOff)'
+        toggleButton.style.border = '2px solid var(--accent-color)'
+        toggleButton.style.color = '#eee'
+    }
+
+    continuousPlayback === 0
+        ? startContinousPlayback()
+        : stopContinousPlayback()
+}
+toggleContinuousPlayback()
+
+function listenforContinuousPlayback() {
+    document.getElementById('continousPlaybackToggle').onclick =
+        toggleContinuousPlayback
+}
+
+function findTrackIndex(input) {
+    return trackData.findIndex((track) => {
+        return track.id === input
+    })
+}
+
+export {
+    loadAudio,
+    togglePlay,
+    currentTrackIndex,
+    changeVolume,
+    artwork,
+    changeArtwork,
+}
