@@ -149,10 +149,11 @@ function startPlay() {
     audio.addEventListener(
         'loadeddata',
         (e) => {
-            if (audio.readyState == 4) audio.play()
+            if (audio.readyState == 4 ) audio.play()
         },
         { once: true }
     )
+    if (audio.paused) audio.play()
 
     playPause.className = 'pause'
     playPause.style.visibility = 'visible'

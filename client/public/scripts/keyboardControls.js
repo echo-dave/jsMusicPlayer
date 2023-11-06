@@ -3,9 +3,11 @@ import { trackData } from './tracklist.js'
 import { loadAudio, changeVolume } from './audio.js'
 import removePlayIndicator from './removePlayIndicator.js'
 function keyboardControlListener() {
-    document.addEventListener('keyup', (e) => {
+    document.addEventListener('keydown', (e) => {
         keyboardControls(e.altKey ? `${e.code} ${e.altKey}` : e.code)
-        // console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
+        if (e.code == 'Space'||'ArrowRight'||'ArrowLeft') { e.preventDefault()}
+        if (`${e.code} ${e.altKey}` == 'ArrowDown true' || 'ArrowUp true' ) {e.preventDefault()}
+        console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
     })
 }
 
@@ -71,6 +73,7 @@ function volumeKey(input) {
     if (input === 'up') volume.value = volumeValue + 0.1
     if (input === 'down') volume.value = volumeValue - 0.1
     changeVolume()
+
 }
 
 export { keyboardControlListener }
