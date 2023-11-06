@@ -243,6 +243,10 @@ button {
     color:white;
 }
 
+.nowPlaying {
+    background-color: rgba(0,0,0,.05)!important;
+}
+
 #songTitle {
     font-family: var(--title-font-family);
     font-size: 1.75em;

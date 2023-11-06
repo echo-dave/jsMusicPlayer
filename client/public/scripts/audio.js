@@ -190,6 +190,9 @@ function buildPlayer () {
             let target = e.target;
             if (target.closest('.track')){
                 let trackIndex = findTrackIndex(Number(target.dataset.trackid));
+                let outGoingTrack = document.querySelector('.nowPlaying')
+                if (outGoingTrack) outGoingTrack.classList.remove('nowPlaying')
+                document.querySelector(`[data-trackid='${target.dataset.trackid}']`).classList.add('nowPlaying')
                 loadAudio(trackIndex);
             }
         }

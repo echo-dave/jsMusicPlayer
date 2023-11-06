@@ -6,15 +6,31 @@ function keyboardControlListener() { document.addEventListener('keyup', e => {
     // console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
 })}
 
+const removePlayIndicator = async () => {
+    let outGoingTrack = document.querySelector('.nowPlaying')
+    if (outGoingTrack) outGoingTrack.classList.remove('nowPlaying')
+}
+
 function nextTrack() {
     console.log(`currentIndex: ${currentTrackIndex}`);
     if (currentTrackIndex >= 0 && currentTrackIndex < trackData.length - 1) {
+        removePlayIndicator()
+        document.querySelector(`[data-trackid='${trackData[currentTrackIndex + 1].id}']`).classList.add('nowPlaying')
         loadAudio(currentTrackIndex+1)
-    } else if (typeof(currentTrackIndex) == "undefined") loadAudio(0);
+    } else if (typeof(currentTrackIndex) == "undefined") {
+        removePlayIndicator()
+        document.querySelector(`[data-trackid='${trackData[0].id}']`).classList.add('nowPlaying')
+        loadAudio(0);
+    }
 }
 
 function previousTrack() {
+    console.log('inded', currentTrackIndex)
+    if (currentTrackIndex > 0) {
+    removePlayIndicator()
+    document.querySelector(`[data-trackid='${trackData[currentTrackIndex - 1].id}']`).classList.add('nowPlaying')
     loadAudio(currentTrackIndex-1)
+    }
 }
 
 function keyboardControls (code) {
