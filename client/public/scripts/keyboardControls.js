@@ -4,10 +4,8 @@ import { loadAudio, changeVolume } from './audio.js'
 import removePlayIndicator from './removePlayIndicator.js'
 function keyboardControlListener() {
     document.addEventListener('keydown', (e) => {
-        keyboardControls(e.altKey ? `${e.code} ${e.altKey}` : e.code)
-        if (e.code == 'Space'||'ArrowRight'||'ArrowLeft') { e.preventDefault()}
-        if (`${e.code} ${e.altKey}` == 'ArrowDown true' || 'ArrowUp true' ) {e.preventDefault()}
-        console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
+        keyboardControls(e.altKey ? `${e.code} ${e.altKey}` : e.code, e)
+        // console.log(e.altKey? `${e.code} ${e.altKey}` : e.code);
     })
 }
 
@@ -41,24 +39,29 @@ function previousTrack() {
     }
 }
 
-function keyboardControls(code) {
+function keyboardControls(code,e) {
     switch (code) {
         case 'Space':
+            e.preventDefault()
             togglePlay()
             break
         case 'ArrowRight':
+            e.preventDefault()
             nextTrack()
             break
 
         case 'ArrowLeft':
+            e.preventDefault()
             previousTrack()
             break
 
         case 'ArrowDown true':
+            e.preventDefault()
             volumeKey('down')
             break
 
         case 'ArrowUp true':
+            e.preventDefault()
             volumeKey('up')
             break
 
