@@ -37,9 +37,9 @@ function buildPlayer() {
                 <input type="range" name="playhead" id="playhead" min="0" max="100" step="1" value="0">
                 <span id="timeRemaining">0:00</span>
             </div>
-            <div id="wrapVolume">
+           <!-- <div id="wrapVolume">
                 <input type="range" name="volume" id="volume" min="0" max="1" step=".01" value="1" >
-            </div>
+            </div> -->
             <div class="controlsBg"></div>
 
         </div>
@@ -50,8 +50,8 @@ function buildPlayer() {
     player.innerHTML = jsMusicPlayer
     audio = document.querySelector('audio')
 
-    const volume = document.querySelector('#volume')
-    volume.addEventListener('input', () => changeVolume(audio))
+    // const volume = document.querySelector('#volume')
+    // volume.addEventListener('input', () => changeVolume(audio))
 
     const playPause = document.querySelector('#playPause')
     playPause.addEventListener('click', () => {
@@ -69,15 +69,27 @@ const loadAudio = (id) => {
     stopPlay(audio)
     audio.src = url
     audio.load()
-    if (initializeContext === 0) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-        gainNode = audioCtx.createGain()
-        gainNode.connect(audioCtx.destination)
-        sourceAudio = audioCtx.createMediaElementSource(audio)
-        sourceAudio.connect(gainNode)
-        gainNode.gain.value = document.querySelector('#volume').value
-        initializeContext = 1
-    }
+
+    //audioContext breatks background audio on iOS
+
+    // if (initializeContext === 0) {
+    //     // audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+    //     audioCtx = new AudioContext()
+    //     audioCtx.onstatechange = () => {
+    //         if (sourceAudio) console.log(sourceAudio)
+    //         console.log('change: ', audioCtx.state)
+
+    //         if (audioCtx.state === 'interrupted') audioCtx.resume()
+    //     }
+
+    //     gainNode = audioCtx.createGain()
+    //     gainNode.connect(audioCtx.destination)
+    //     sourceAudio = audioCtx.createMediaElementSource(audio)
+    //     console.log(sourceAudio)
+    //     sourceAudio.connect(gainNode)
+    //     gainNode.gain.value = document.querySelector('#volume').value
+    //     initializeContext = 1
+    // }
 
     //Make sure the listener for the playhead only gets added once
     if (!audio['data-time']) {
@@ -123,12 +135,12 @@ function timeRemaining(remainingTime) {
     ).innerText = `-${currentRemainingTime}`
 }
 
-function changeVolume() {
-    // document.querySelector("audio").volume = volume.value;
-    typeof gainNode !== 'undefined'
-        ? (gainNode.gain.value = document.querySelector('#volume').value)
-        : null //volume change through audioContext for mobile
-}
+// function changeVolume() {
+//     // document.querySelector("audio").volume = volume.value;
+//     typeof gainNode !== 'undefined'
+//         ? (gainNode.gain.value = document.querySelector('#volume').value)
+//         : null //volume change through audioContext for mobile
+// }
 
 function applyAudioMetadata(audio, title) {
     const songTitle = document.querySelector('#songTitle')
@@ -149,7 +161,7 @@ function startPlay() {
     audio.addEventListener(
         'loadeddata',
         (e) => {
-            if (audio.readyState == 4 ) audio.play()
+            if (audio.readyState == 4) audio.play()
         },
         { once: true }
     )
@@ -244,7 +256,7 @@ export {
     loadAudio,
     togglePlay,
     currentTrackIndex,
-    changeVolume,
+    // changeVolume,
     artwork,
     changeArtwork,
 }

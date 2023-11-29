@@ -1,6 +1,6 @@
 import { togglePlay, currentTrackIndex } from './audio.js'
 import { trackData } from './tracklist.js'
-import { loadAudio, changeVolume } from './audio.js'
+import { loadAudio } from './audio.js'
 import removePlayIndicator from './removePlayIndicator.js'
 function keyboardControlListener() {
     document.addEventListener('keydown', (e) => {
@@ -39,7 +39,7 @@ function previousTrack() {
     }
 }
 
-function keyboardControls(code,e) {
+function keyboardControls(code, e) {
     switch (code) {
         case 'Space':
             e.preventDefault()
@@ -55,28 +55,28 @@ function keyboardControls(code,e) {
             previousTrack()
             break
 
-        case 'ArrowDown true':
-            e.preventDefault()
-            volumeKey('down')
-            break
+        // case 'ArrowDown true':
+        //     e.preventDefault()
+        //     volumeKey('down')
+        //     break
 
-        case 'ArrowUp true':
-            e.preventDefault()
-            volumeKey('up')
-            break
+        // case 'ArrowUp true':
+        //     e.preventDefault()
+        //     volumeKey('up')
+        //     break
 
         default:
             break
     }
 }
 
-function volumeKey(input) {
-    const volume = document.querySelector('#volume')
-    let volumeValue = Number(volume.value)
-    if (input === 'up') volume.value = volumeValue + 0.1
-    if (input === 'down') volume.value = volumeValue - 0.1
-    changeVolume()
+// function volumeKey(input) {
+//     const volume = document.querySelector('#volume')
+//     let volumeValue = Number(volume.value)
+//     if (input === 'up') volume.value = volumeValue + 0.1
+//     if (input === 'down') volume.value = volumeValue - 0.1
+//     changeVolume()
 
-}
+// }
 
 export { keyboardControlListener }
